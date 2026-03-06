@@ -5,7 +5,7 @@ import "./mynav2.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdClose } from "react-icons/io";
 import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
-import { useUser } from "../context/Usercontext";
+import { useUser } from "../context/UserContext";
 
 export const MyNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
