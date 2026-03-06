@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
 import { auth } from "../firabse/FireBaseConfig";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import "./resetPasswordConfirm.css";
+import "./resetpasswordconfirm.css";
 
 /**
  * ResetPasswordConfirm komponens
