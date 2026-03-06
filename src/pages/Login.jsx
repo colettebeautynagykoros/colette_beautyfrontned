@@ -14,7 +14,7 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
-import "./login.css";
+import "./Login.css";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { auth, db } from "../firabse/FireBaseConfig";
