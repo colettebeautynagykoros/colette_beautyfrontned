@@ -4,8 +4,8 @@ import "./Szolgaltatasaim.css";
 
 import skincareImg from "../assets/kozmetika1.PNG";
 import szempillaImg from "../assets/szempilla.png";
-import sminkImg from "../assets/smink2.png";
-import gynataImg from "../assets/wax3.png";
+import sminkImg from "../assets/smink2.PNG";
+import gynataImg from "../assets/wax3.PNG";
 import { SectionTitle } from "./Sectiontitle";
 
 export const Szolgaltatasaim = () => {

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import "./kozmetika.css";
 
-import arcmasszas from "../assets/arcmasszas.png";
-import gyulladas from "../assets/gyulladas.png";
+import arcmasszas from "../assets/arcmasszas.PNG";
+import gyulladas from "../assets/gyulladas.PNG";
 import melytaplalo from "../assets/melytaplalo.jpg";
 import anti_acne from "../assets/kollagen.png";
 import kollagen from "../assets/anti_acne.png";
