@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Szolgaltatasaim.css";
 
-import skincareImg from "../assets/kozmetika1.png";
+import skincareImg from "../assets/kozmetika1.PNG";
 import szempillaImg from "../assets/szempilla.png";
 import sminkImg from "../assets/smink2.png";
 import gynataImg from "../assets/wax3.png";
