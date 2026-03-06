@@ -1,0 +1,640 @@
+/* ==============================
+   GLOBAL
+   ============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Booking Calendar Wrapper ===== */
+.booking-calendar-wrapper {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+/* ===== Main Card ===== */
+.booking-calendar-card {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 240, 245, 0.98) 100%
+  );
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border-radius: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 20px 40px rgba(214, 62, 120, 0.15),
+    0 0 0 1px rgba(214, 62, 120, 0.08),
+    inset 0 0 60px rgba(255, 220, 235, 0.35);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.booking-calendar-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 170, 200, 0.12), transparent 65%),
+    radial-gradient(circle at top right, rgba(255, 170, 200, 0.233), transparent 65%),
+    radial-gradient(circle at bottom left, rgba(255, 170, 200, 0.212), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== Header ===== */
+.booking-calendar-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.booking-calendar-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 55%, 35%) 0%,
+    hsl(340, 70%, 55%) 50%,
+    hsl(340, 55%, 35%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.booking-calendar-subtitle {
+  font-size: 0.9rem;
+  color: hsl(340, 30%, 45%);
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+/* ===== Calendar Navigation ===== */
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 0.25rem;
+}
+
+.calendar-month {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  font-weight: 600;
+  color: hsl(340, 40%, 30%);
+  text-transform: capitalize;
+}
+
+.calendar-nav-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.6);
+  color: hsl(340, 50%, 45%);
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.calendar-nav-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.calendar-nav-btn:hover {
+  background: hsl(340, 65%, 55%);
+  color: white;
+  box-shadow:
+    0 6px 14px rgba(214, 62, 120, 0.25),
+    0 0 0 4px rgba(214, 62, 120, 0.15);
+}
+
+/* ===== Calendar Grid – 6 col (no sunday) ===== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(4px, 1vw, 6px);
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  border-radius: 10px;
+}
+
+.calendar-dayname {
+  text-align: center;
+  font-size: clamp(0.6rem, 1.8vw, 0.7rem);
+  font-weight: 500;
+  opacity: 0.5;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+}
+
+.calendar-cell.empty {
+  background: transparent;
+}
+
+.calendar-cell.day {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.45);
+  color: hsl(340, 35%, 35%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.18s ease;
+}
+
+.calendar-cell.day:hover:not(.past):not(.selected) {
+  background: rgba(214, 62, 120, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(214, 62, 120, 0.15);
+}
+
+.calendar-cell.day.selected {
+  background: linear-gradient(135deg, hsl(340, 75%, 55%), hsl(340, 85%, 60%));
+  color: white;
+  box-shadow:
+    0 0 0 4px rgba(214, 62, 120, 0.18),
+    0 0 18px rgba(214, 62, 120, 0.45),
+    inset 0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+.calendar-cell.day.past {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ===== Popup Overlay ===== */
+.popup-overlay,
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* ===== Popup ===== */
+.popup {
+  position: relative;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.99) 0%,
+    rgba(255, 242, 249, 0.99) 100%
+  );
+  padding: clamp(1.5rem, 5vw, 2rem);
+  width: 100%;
+  max-width: 480px;
+  max-height: 88dvh;
+  overflow-y: auto;
+  border-radius: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 32px 64px rgba(214, 62, 120, 0.18),
+    0 0 0 1px rgba(214, 62, 120, 0.06),
+    inset 0 0 50px rgba(255, 220, 235, 0.28);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(214, 62, 120, 0.25) transparent;
+}
+
+.popup::-webkit-scrollbar { width: 4px; }
+.popup::-webkit-scrollbar-track { background: transparent; }
+.popup::-webkit-scrollbar-thumb {
+  background: rgba(214, 62, 120, 0.25);
+  border-radius: 4px;
+}
+
+.popup-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.15rem, 4vw, 1.45rem);
+  font-weight: 600;
+  text-align: center;
+  margin: 0.5rem 0 1.25rem 0;
+  padding: 0 2.5rem;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 50%, 35%) 0%,
+    hsl(340, 65%, 50%) 50%,
+    hsl(340, 50%, 35%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Custom Service Dropdown ===== */
+.service-dropdown {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.25rem;
+  z-index: 20;
+}
+
+.service-dropdown-trigger {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  font-family: inherit;
+  border-radius: 12px;
+  border: 1.5px solid rgba(214, 62, 120, 0.18);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 242, 249, 0.96)
+  );
+  color: hsl(340, 40%, 30%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  box-shadow:
+    0 2px 8px rgba(214, 62, 120, 0.07),
+    inset 0 0 16px rgba(255, 220, 235, 0.18);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.service-dropdown-trigger:hover {
+  border-color: rgba(214, 62, 120, 0.35);
+  box-shadow:
+    0 4px 14px rgba(214, 62, 120, 0.13),
+    inset 0 0 20px rgba(255, 220, 235, 0.22);
+}
+
+.service-dropdown-trigger.open {
+  border-color: hsl(340, 65%, 55%);
+  border-radius: 12px 12px 0 0;
+  box-shadow:
+    0 4px 14px rgba(214, 62, 120, 0.18),
+    inset 0 0 20px rgba(255, 220, 235, 0.28);
+}
+
+.service-dropdown-trigger .placeholder {
+  color: hsl(340, 18%, 60%);
+  font-style: italic;
+}
+
+.service-dropdown-trigger .selected-label {
+  color: hsl(340, 50%, 28%);
+  font-weight: 500;
+}
+
+.dropdown-chevron {
+  width: 17px;
+  height: 17px;
+  color: hsl(340, 55%, 55%);
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.service-dropdown-trigger.open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.service-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.99),
+    rgba(255, 244, 250, 0.99)
+  );
+  border: 1.5px solid hsl(340, 65%, 55%);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  max-height: 210px;
+  overflow-y: auto;
+  box-shadow:
+    0 14px 30px rgba(214, 62, 120, 0.16),
+    inset 0 0 24px rgba(255, 220, 235, 0.1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(214, 62, 120, 0.28) transparent;
+}
+
+.service-dropdown-list::-webkit-scrollbar { width: 4px; }
+.service-dropdown-list::-webkit-scrollbar-track { background: transparent; }
+.service-dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(214, 62, 120, 0.28);
+  border-radius: 4px;
+}
+
+.service-dropdown-option {
+  padding: 0.72rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid rgba(214, 62, 120, 0.06);
+  transition: background 0.14s ease;
+  font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+  color: hsl(340, 35%, 28%);
+}
+
+.service-dropdown-option:last-child {
+  border-bottom: none;
+  border-radius: 0 0 10px 10px;
+}
+
+.service-dropdown-option:hover {
+  background: rgba(214, 62, 120, 0.06);
+}
+
+.service-dropdown-option.active {
+  background: linear-gradient(
+    135deg,
+    rgba(214, 62, 120, 0.1),
+    rgba(255, 160, 200, 0.08)
+  );
+  color: hsl(340, 60%, 30%);
+  font-weight: 600;
+}
+
+.option-name {
+  flex: 1;
+  line-height: 1.3;
+}
+
+.option-duration {
+  font-size: 0.72rem;
+  color: hsl(340, 40%, 52%);
+  background: rgba(214, 62, 120, 0.08);
+  padding: 0.18rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.service-dropdown-option.active .option-duration {
+  background: rgba(214, 62, 120, 0.14);
+  color: hsl(340, 60%, 38%);
+}
+
+.option-check {
+  width: 15px;
+  height: 15px;
+  color: hsl(340, 65%, 48%);
+  flex-shrink: 0;
+}
+
+/* ===== Error ===== */
+.error-text {
+  color: hsl(0, 65%, 50%);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ===== Time Table – 6 col grid, NEM flex ===== */
+.time-table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.time-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+}
+
+.time-cell {
+  padding: clamp(0.38rem, 1.5vw, 0.52rem) 0;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  border-radius: 8px;
+  border: 1.5px solid rgba(214, 62, 120, 0.12);
+  background: rgba(255, 255, 255, 0.85);
+  color: hsl(340, 40%, 30%);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.time-cell:hover:not(:disabled) {
+  background: hsl(340, 80%, 96%);
+  border-color: rgba(214, 62, 120, 0.3);
+  box-shadow: 0 3px 10px rgba(214, 62, 120, 0.14);
+  transform: translateY(-1px);
+}
+
+.time-cell.selected {
+  background: linear-gradient(135deg, hsl(340, 75%, 55%), hsl(340, 85%, 60%));
+  color: white;
+  border-color: transparent;
+  box-shadow:
+    0 0 0 3px rgba(214, 62, 120, 0.18),
+    0 0 12px rgba(214, 62, 120, 0.38),
+    inset 0 0 14px rgba(255, 255, 255, 0.3);
+}
+
+.time-cell.booked,
+.time-cell.blocked {
+  background: rgba(214, 62, 120, 0.04);
+  color: hsl(340, 20%, 72%);
+  border-color: rgba(214, 62, 120, 0.07);
+  cursor: not-allowed;
+  text-decoration: line-through;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===== Confirm Button ===== */
+.confirm-btn {
+  width: 100%;
+  padding: clamp(0.85rem, 3vw, 1rem) 2rem;
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, hsl(340, 70%, 55%), hsl(340, 80%, 60%));
+  box-shadow:
+    0 6px 18px rgba(214, 62, 120, 0.38),
+    0 0 0 4px rgba(214, 62, 120, 0.12);
+  transition: all 0.2s ease;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 28px rgba(214, 62, 120, 0.48),
+    0 0 0 4px rgba(214, 62, 120, 0.15);
+}
+
+.confirm-btn:disabled,
+.confirm-btn.loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Close Button ===== */
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1.5px solid rgba(214, 62, 120, 0.22);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 235, 245, 0.92));
+  color: hsl(340, 60%, 38%);
+  box-shadow:
+    0 4px 12px rgba(214, 62, 120, 0.14),
+    inset 0 0 10px rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  transition: all 0.22s ease;
+  z-index: 30;
+}
+
+.close-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.close-btn:hover {
+  transform: translateY(-2px) scale(1.07);
+  background: linear-gradient(145deg, hsl(340, 75%, 60%), hsl(340, 85%, 65%));
+  color: white;
+  border-color: transparent;
+  box-shadow:
+    0 8px 20px rgba(214, 62, 120, 0.32),
+    0 0 0 4px rgba(214, 62, 120, 0.14);
+}
+
+.close-btn:active {
+  transform: scale(0.91);
+}
+
+.close-btn.arrow {
+  right: auto;
+  left: 16px;
+}
+
+/* ===== Utility ===== */
+.close { display: none; }
+
+/* ===== Loading Spinner ===== */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .popup {
+    max-width: 94vw;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-overlay,
+  .overlay {
+    padding: 0.75rem;
+  }
+
+  .popup {
+    max-width: 100%;
+    max-height: 92dvh;
+    border-radius: 20px;
+    padding: 1.25rem 1rem;
+  }
+
+  .time-row { gap: 4px; }
+  .calendar-grid { gap: 4px; }
+  .service-dropdown-list { max-height: 180px; }
+}
+
+@media (max-width: 360px) {
+  .booking-calendar-card { border-radius: 16px; }
+  .popup {
+    border-radius: 16px;
+    padding: 1rem 0.875rem;
+  }
+  .time-cell {
+    font-size: 0.65rem;
+    padding: 0.35rem 0;
+  }
+  .calendar-grid { gap: 3px; }
+  .time-row { gap: 3px; }
+}
+
+/* ===== Blokkolt nap – piros áthúzás ===== */
+.calendar-cell.day.blocked-day {
+  opacity: 0.55;
+  cursor: not-allowed;
+  color: hsl(0, 65%, 50%);
+  text-decoration: line-through;
+  text-decoration-color: hsl(0, 65%, 50%);
+  text-decoration-thickness: 2px;
+  background: rgba(220, 38, 38, 0.06);
+  border-color: rgba(220, 38, 38, 0.15);
+}
+
+.calendar-cell.day.blocked-day:hover {
+  transform: none;
+  background: rgba(220, 38, 38, 0.06);
+  box-shadow: none;
+}
+
+/* Töröld vagy üríts ki a régi blocked-indicator stílust */
+.blocked-indicator { display: none; }
+
+.close-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}

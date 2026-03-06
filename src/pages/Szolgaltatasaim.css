@@ -1,0 +1,648 @@
+/* ===== SZOLGALTATASAIM - Modern Beauty Services Section ===== */
+
+.tartalom-section.ferde-szolgaltatasok {
+  padding: 5rem 2rem;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+}
+
+/* ===== Title Card with Decorative Corners ===== */
+
+.card {
+  position: relative;
+  padding: 0.5rem;
+}
+
+.card-border {
+  position: relative;
+  padding: 1.5rem 4rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 240, 245, 0.95) 100%
+  );
+  border-radius: 0;
+  backdrop-filter: blur(10px);
+}
+
+/* Decorative Corners */
+.corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid hsl(340, 65%, 55%);
+}
+
+.corner.top.left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner.top.right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner.bottom.left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.corner.bottom.right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.szolgaltatasok-cim {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: hsl(340, 40%, 25%);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 50%, 35%) 0%,
+    hsl(340, 65%, 50%) 50%,
+    hsl(340, 50%, 35%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Skewed Cards Wrapper ===== */
+
+.ferde-wrapper {
+  display: flex;
+  gap: 5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  perspective: 1000px;
+}
+
+/* ===== Individual Skewed Card ===== */
+
+.ferde-kartya {
+  position: relative;
+  width: 360px;
+  height: 480px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  transform: skewY(-3deg);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 
+    0 25px 50px -12px rgba(214, 62, 120, 0.25),
+    0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.ferde-kartya::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+
+.ferde-kartya::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 50%
+  ) border-box;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.ferde-kartya:hover {
+  transform: skewY(-3deg) translateY(-15px) scale(1.02);
+  box-shadow: 
+    0 35px 60px -15px rgba(214, 62, 120, 0.35),
+    0 15px 30px -8px rgba(0, 0, 0, 0.15);
+}
+
+.ferde-kartya:hover::after {
+  opacity: 1;
+}
+
+/* Stagger the skew direction */
+.ferde-kartya:nth-child(2) {
+  transform: skewY(3deg);
+}
+
+.ferde-kartya:nth-child(2):hover {
+  transform: skewY(3deg) translateY(-15px) scale(1.02);
+}
+
+.ferde-kartya:nth-child(3) {
+  transform: skewY(-3deg);
+}
+
+.ferde-kartya:nth-child(3):hover {
+  transform: skewY(-3deg) translateY(-15px) scale(1.02);
+}
+
+.ferde-kartya:nth-child(4) {
+  transform: skewY(3deg);
+}
+
+.ferde-kartya:nth-child(4):hover {
+  transform: skewY(3deg) translateY(-15px) scale(1.02);
+}
+
+/* ===== Card Content ===== */
+
+.kartya-content {
+  position: relative;
+  z-index: 2;
+  transform: skewY(3deg);
+  margin-bottom: 1.5rem;
+}
+
+.ferde-kartya:nth-child(2) .kartya-content {
+  transform: skewY(-3deg);
+}
+
+.ferde-kartya:nth-child(3) .kartya-content {
+  transform: skewY(3deg);
+}
+
+.ferde-kartya:nth-child(4) .kartya-content {
+  transform: skewY(-3deg);
+}
+
+
+.kartya-content h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.75rem 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.05em;
+}
+
+.kartya-content p {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Booking Button ===== */
+
+.foglalas-btn {
+  position: relative;
+  z-index: 2;
+  padding: 1rem 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(340, 40%, 25%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 240, 245, 0.95) 100%
+  );
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 
+    0 4px 15px rgba(214, 62, 120, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  transform: skewY(3deg);
+}
+
+.ferde-kartya:nth-child(2) .foglalas-btn {
+  transform: skewY(-3deg);
+}
+
+.ferde-kartya:nth-child(3) .foglalas-btn {
+  transform: skewY(3deg);
+}
+
+.ferde-kartya:nth-child(4) .foglalas-btn {
+  transform: skewY(-3deg);
+}
+.foglalas-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 65%, 55%) 0%,
+    hsl(340, 75%, 65%) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1; /* ← ez az egyetlen új sor */
+}
+
+.foglalas-btn span,
+.foglalas-btn {
+  position: relative;
+  z-index: 1;
+}
+
+.foglalas-btn:hover {
+  color: #fff !important;
+  transform: skewY(3deg) translateY(-3px);
+  box-shadow: 
+    0 8px 25px rgba(214, 62, 120, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ferde-kartya:nth-child(2) .foglalas-btn:hover {
+  transform: skewY(-3deg) translateY(-3px);
+}
+
+.ferde-kartya:nth-child(3) .foglalas-btn:hover {
+  transform: skewY(3deg) translateY(-3px);
+}
+
+.ferde-kartya:nth-child(4) .foglalas-btn:hover {
+  transform: skewY(-3deg) translateY(-3px);
+}
+
+.foglalas-btn:hover::before {
+  opacity: 1;
+}
+
+.foglalas-btn:active {
+  transform: skewY(3deg) translateY(-1px);
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 1200px) {
+  .ferde-wrapper {
+    gap: 1.5rem;
+  }
+
+  .ferde-kartya {
+    width: 320px;
+    height: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tartalom-section.ferde-szolgaltatasok {
+    padding: 3rem 1rem;
+    gap: 2.5rem;
+  }
+
+  .szolgaltatasok-cim {
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  .card-border {
+    padding: 1rem 2rem;
+  }
+
+  .ferde-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ferde-kartya {
+    width: 100%;
+    max-width: 380px;
+    height: 350px;
+    transform: skewY(0deg) !important;
+  }
+
+  .ferde-kartya:hover {
+    transform: translateY(-10px) scale(1.01) !important;
+  }
+
+  .kartya-content,
+  .foglalas-btn {
+    transform: none !important;
+  }
+
+  .foglalas-btn:hover {
+    transform: translateY(-3px) !important;
+  }
+
+  .kartya-content h3 {
+    font-size: 1.6rem;
+  }
+
+  .kartya-content p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .szolgaltatasok-cim {
+    font-size: 1.5rem;
+  }
+
+  .ferde-kartya {
+    height: 320px;
+    padding: 1.5rem;
+  }
+
+  .foglalas-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.85rem;
+  }
+}
+/* ===== Animation on Scroll ===== */
+
+/* Alap kártya állapot */
+.ferde-kartya {
+  opacity: 0;
+  transform: translateY(40px) skewY(var(--skew, -3deg));
+  transition: transform 0.8s cubic-bezier(0.23,1,0.32,1),
+              opacity 0.8s ease;
+  will-change: transform, opacity;
+}
+
+/* Scroll animáció */
+.animate-cards .ferde-kartya {
+  opacity: 1;
+  transform: translateY(0) skewY(var(--skew, -3deg));
+}
+
+/* Stagger: csak a scroll animációhoz */
+.a1 { transition-delay: 0.1s; }
+.a2 { transition-delay: 0.25s; }
+.a3 { transition-delay: 0.4s; }
+.a4 { transition-delay: 0.55s; }
+
+/* Hover effekt: azonnali, lagg nélkül */
+.ferde-kartya:hover {
+  transition-delay: 0s !important; /* hover azonnal indul */
+  transform: translateY(-15px) scale(1.02) skewY(var(--skew, -3deg));
+  box-shadow:
+    0 35px 60px -15px rgba(214, 62, 120, 0.35),
+    0 15px 30px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* Kartya tartalom és gomb ellenskew */
+.kartya-content, .foglalas-btn {
+  z-index: 2;
+  position: relative;
+}
+
+/* Responsive / skálázás */
+@media (max-width: 768px) {
+  .ferde-kartya {
+    transform: none !important;
+  }
+  .kartya-content, .foglalas-btn {
+    transform: none !important;
+  }
+}
+/* ── Ezt add a Szolgaltatasaim.css ALJÁRA ─────────────────────── */
+
+/* ===== Bevezető szöveg ===== */
+.szolg-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 640px;
+  text-align: center;
+  animation: fadeInUp 0.8s ease both;
+}
+
+.szolg-intro__lead {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: hsl(340, 45%, 30%);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.szolg-intro__sub {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: hsl(340, 25%, 45%);
+  margin: 0;
+}
+
+/* Dekorációs elválasztó */
+.szolg-intro__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  width: 220px;
+}
+
+.szolg-intro__divider span:not(.szolg-intro__diamond) {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(340, 55%, 70%),
+    transparent
+  );
+}
+
+.szolg-intro__diamond {
+  font-size: 0.75rem;
+  color: hsl(340, 65%, 55%);
+  flex-shrink: 0;
+}
+
+/* Fade-in animáció */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .szolg-intro__lead {
+    font-size: 1.15rem;
+  }
+
+  .szolg-intro__sub {
+    font-size: 0.9rem;
+  }
+}
+/* ── Ezt CSERÉLD LE a Szolgaltatasaim.css-ben ─────────────────────
+   Az érintett szelektorok: .card, .card-border, .corner*, .szolgaltatasok-cim
+   Töröld ki az összes .card / .card-border / .corner szabályt,
+   és add hozzá ezt:
+─────────────────────────────────────────────────────────────────── */
+
+/* ===== Cím konténer ===== */
+.cim-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0 2rem;
+}
+
+/* Háttér petal SVG – abszolút, középre igazítva */
+.cim-wrap__petals {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  height: 160px;
+  pointer-events: none;
+  opacity: 0.18;          /* halványan látszik a cím mögött */
+  z-index: 0;
+}
+
+/* Pill badge a cím fölé */
+.cim-wrap__badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 1.1rem;
+  border-radius: 50px;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 80%, 94%) 0%,
+    hsl(340, 70%, 90%) 100%
+  );
+  border: 1px solid hsl(340, 60%, 82%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(340, 60%, 50%);
+  margin-bottom: 0.6rem;
+}
+
+.cim-wrap__badge::before,
+.cim-wrap__badge::after {
+  content: "✦";
+  font-size: 0.55rem;
+  opacity: 0.7;
+}
+
+/* Főcím */
+.szolgaltatasok-cim {
+  position: relative;
+  z-index: 1;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 50%, 30%) 0%,
+    hsl(340, 70%, 52%) 50%,
+    hsl(340, 50%, 30%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dekorációs aláhúzás vonal */
+.cim-wrap__line {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+  width: 320px;
+}
+
+.cim-wrap__line span:not(.cim-wrap__line-gem) {
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(340, 65%, 68%),
+    transparent
+  );
+}
+
+.cim-wrap__line-gem {
+  width: 8px;
+  height: 8px;
+  background: hsl(340, 70%, 60%);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px hsl(340, 70%, 70%);
+}
+
+/* ===== Mobil ===== */
+@media (max-width: 768px) {
+  .szolgaltatasok-cim {
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+  }
+
+  .cim-wrap__petals {
+    width: 260px;
+    height: 110px;
+  }
+
+  .cim-wrap__line {
+    width: 220px;
+  }
+}

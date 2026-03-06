@@ -1,0 +1,513 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --rose-deep:    hsl(340, 52%, 30%);
+  --rose-mid:     hsl(340, 62%, 48%);
+  --rose-bright:  hsl(340, 76%, 58%);
+  --rose-pale:    hsl(340, 55%, 94%);
+  --rose-blush:   hsl(340, 45%, 97%);
+  --gold:         hsl(32, 62%, 60%);
+  --gold-light:   hsl(38, 75%, 76%);
+  --text-dark:    hsl(340, 42%, 16%);
+  --text-mid:     hsl(340, 28%, 38%);
+  --text-soft:    hsl(340, 20%, 56%);
+}
+
+/* ── Section shell ─────────────────────────────────────────── */
+.waxing-section {
+  min-height: 100vh;
+  padding: 5rem 2rem 6rem;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.waxing-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 10%, rgba(255,185,215,0.30) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 90% 85%, rgba(255,210,230,0.24) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 85% 15%, rgba(255,200,225,0.18) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.waxing-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Layout ────────────────────────────────────────────────── */
+.waxing-content-wrapper {
+  display: flex;
+  gap: 2.8rem;
+  align-items: stretch;
+}
+
+/* ── Price List wrapper ────────────────────────────────────── */
+.waxing-pricelist-wrapper {
+  flex: 1.1;
+  min-width: 0;
+  position: relative;
+}
+
+/* The background div becomes the glassmorphism card shell */
+.waxing-pricelist-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.97) 0%,
+    rgba(255,245,250,0.98) 100%
+  );
+  border: 1.5px solid rgba(255,255,255,0.92);
+  box-shadow:
+    0 30px 70px rgba(214,62,120,0.13),
+    0 8px 24px rgba(214,62,120,0.08),
+    inset 0 0 100px rgba(255,220,235,0.38),
+    inset 0 0 0 1px rgba(255,200,220,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(.25,1,.5,1), box-shadow 0.45s ease;
+}
+
+/* Corner ambient glows */
+.waxing-pricelist-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8%   7%,  rgba(255,160,200,0.14), transparent 48%),
+    radial-gradient(circle at 92%  8%,  rgba(255,185,215,0.16), transparent 50%),
+    radial-gradient(circle at 10%  92%, rgba(255,150,195,0.11), transparent 50%),
+    radial-gradient(circle at 90%  90%, rgba(255,180,210,0.13), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top edge glow line */
+.waxing-pricelist-bg::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(214,120,160,0.45),
+    rgba(200,100,140,0.35),
+    transparent
+  );
+  z-index: 1;
+}
+
+.waxing-pricelist-wrapper:hover .waxing-pricelist-bg {
+  transform: translateY(-5px);
+  box-shadow:
+    0 45px 90px rgba(214,62,120,0.18),
+    0 12px 32px rgba(214,62,120,0.10),
+    inset 0 0 120px rgba(255,220,235,0.45),
+    inset 0 0 0 1px rgba(255,200,220,0.28);
+}
+
+/* Shine sweep on card hover */
+.waxing-pricelist-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255,255,255,0.30) 50%,
+    transparent 65%
+  );
+  transform: skewX(-8deg);
+  transition: left 0.8s ease;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.waxing-pricelist-wrapper:hover::after {
+  left: 120%;
+}
+
+.waxing-pricelist-outer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Price list inner content ──────────────────────────────── */
+.waxing-pricelist-inner {
+  padding: 2.8rem 2.8rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inner header */
+.waxing-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid rgba(214,62,120,0.10);
+  text-align: center;
+}
+
+.waxing-list-header-ornament {
+  font-size: 0.78rem;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.waxing-list-header-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-bright) 50%, var(--rose-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.waxing-list-header-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+
+/* Separator */
+.waxing-sep {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.6rem;
+}
+.waxing-sep::before,
+.waxing-sep::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+.waxing-sep::before {
+  background: linear-gradient(90deg, transparent, rgba(200,130,160,0.35));
+}
+.waxing-sep::after {
+  background: linear-gradient(90deg, rgba(200,130,160,0.35), transparent);
+}
+.waxing-sep-diamond {
+  font-size: 0.65rem;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}
+
+/* ── List ──────────────────────────────────────────────────── */
+.waxing-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.waxing-item {
+  opacity: 0;
+  transform: translateX(-16px);
+  animation: waxItemIn 0.55s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.waxing-item:nth-child(1) { animation-delay: 0.55s; }
+.waxing-item:nth-child(2) { animation-delay: 0.62s; }
+.waxing-item:nth-child(3) { animation-delay: 0.69s; }
+.waxing-item:nth-child(4) { animation-delay: 0.76s; }
+.waxing-item:nth-child(5) { animation-delay: 0.83s; }
+.waxing-item:nth-child(6) { animation-delay: 0.90s; }
+.waxing-item:nth-child(7) { animation-delay: 0.97s; }
+.waxing-item:nth-child(8) { animation-delay: 1.04s; }
+.waxing-item:nth-child(9) { animation-delay: 1.11s; }
+
+@keyframes waxItemIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Each row ──────────────────────────────────────────────── */
+.waxing-item-content {
+  display: flex;
+  align-items: center;
+  padding: 0.95rem 1.2rem;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition:
+    background  0.3s ease,
+    transform   0.35s cubic-bezier(.25,1,.5,1),
+    box-shadow  0.35s ease,
+    border-color 0.3s ease;
+}
+
+/* Hover fill */
+.waxing-item-content:hover {
+  background: linear-gradient(100deg,
+    rgba(255,235,245,0.85) 0%,
+    rgba(255,248,252,0.7) 100%
+  );
+  transform: translateX(6px);
+  box-shadow:
+    0 4px 18px rgba(214,62,120,0.12),
+    inset 0 0 0 1px rgba(255,160,200,0.2);
+  border-color: rgba(255,150,195,0.18);
+}
+
+/* Left accent stripe */
+.waxing-item-content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  width: 2.5px;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, var(--rose-bright), var(--gold));
+  opacity: 0;
+  transform: scaleY(0.3);
+  transition: opacity 0.3s ease, transform 0.35s ease;
+}
+
+.waxing-item-content:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* Shimmer sweep */
+.waxing-item-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255,255,255,0.45) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.55s ease;
+  pointer-events: none;
+}
+
+.waxing-item-content:hover::after {
+  transform: translateX(120%);
+}
+
+/* Icon */
+.waxing-icon {
+  font-size: 1.1rem;
+  width: 1.9rem;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 1px 3px rgba(214,62,120,0.2));
+}
+
+.waxing-item-content:hover .waxing-icon {
+  transform: scale(1.25) rotate(8deg);
+}
+
+/* Name */
+.waxing-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 0 0 auto;
+}
+
+.waxing-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.waxing-item-content:hover .waxing-name {
+  color: var(--rose-deep);
+}
+
+/* Dotted leader line */
+.waxing-dots {
+  flex: 1;
+  height: 0;
+  margin: 0 1rem;
+  border-bottom: 1.5px dotted rgba(214,62,120,0.20);
+  transition: border-color 0.3s ease;
+}
+
+.waxing-item-content:hover .waxing-dots {
+  border-color: rgba(214,62,120,0.42);
+}
+
+/* Price */
+.waxing-price-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.18rem;
+  flex-shrink: 0;
+}
+
+.waxing-price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--rose-mid) 0%, var(--rose-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: filter 0.3s ease;
+  line-height: 1;
+}
+
+.waxing-item-content:hover .waxing-price {
+  filter: brightness(1.15);
+}
+
+.waxing-currency {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+.waxing-footer {
+  margin-top: 1.8rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(214,62,120,0.10);
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  letter-spacing: 0.03em;
+  opacity: 0;
+  animation: waxItemIn 0.5s ease 1.25s forwards;
+}
+
+/* ── Booking wrapper ───────────────────────────────────────── */
+.waxing-booking-wrapper {
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-self: stretch;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .waxing-section {
+    margin-top: 50px;
+    padding: 4rem 1.5rem 5rem;
+  }
+  .waxing-content-wrapper {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .waxing-pricelist-wrapper,
+  .waxing-booking-wrapper {
+    width: 100%;
+    flex: unset;
+  }
+}
+
+@media (max-width: 768px) {
+  .waxing-section {
+    padding: 3rem 1rem 4rem;
+  }
+  .waxing-pricelist-inner {
+    padding: 2rem 1.6rem 1.6rem;
+  }
+  .waxing-item-content {
+    padding: 0.85rem 1rem;
+  }
+  .waxing-name { font-size: 0.98rem; }
+  .waxing-price { font-size: 1.15rem; }
+}
+
+@media (max-width: 480px) {
+  .waxing-section {
+    padding: 2.5rem 0.75rem 3.5rem;
+    margin-top: 60px;
+  }
+  .waxing-pricelist-inner {
+    padding: 1.6rem 1.1rem 1.4rem;
+  }
+  .waxing-pricelist-bg { border-radius: 22px; }
+
+  /* Sor layout: icon + name flex:1, ar jobbra */
+  .waxing-item-content {
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    transform: none !important;
+  }
+
+  .waxing-name-wrapper {
+    flex: 1;
+    min-width: 0;
+    gap: 0.6rem;
+  }
+
+  .waxing-icon {
+    flex-shrink: 0;
+  }
+
+  .waxing-name {
+    font-size: 0.93rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .waxing-dots { display: none; }
+
+  .waxing-price-wrapper {
+    flex-shrink: 0;
+    margin-left: 0.6rem;
+  }
+
+  .waxing-price    { font-size: 1.05rem; }
+  .waxing-currency { font-size: 0.72rem; }
+}
+

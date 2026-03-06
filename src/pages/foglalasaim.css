@@ -1,0 +1,580 @@
+/* ===== FOGLALÁSAIM PAGE ===== */
+
+.foglalasaim-page {
+  min-height: 100vh;
+  padding-bottom: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 100px;
+  padding-top: 50px;
+}
+
+/* ─── Scroll reveal ─────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Filter tabs ────────────────────────────────────────────────── */
+.foglalas-tabs {
+  display: flex;
+  gap: 0.6rem;
+  background: rgba(255, 240, 245, 0.7);
+  border: 1px solid hsl(340, 50%, 88%);
+  border-radius: 50px;
+  padding: 0.4rem;
+  backdrop-filter: blur(8px);
+}
+
+.foglalas-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.3rem;
+  border: none;
+  border-radius: 50px;
+  background: transparent;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: hsl(340, 30%, 50%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.foglalas-tab:hover {
+  color: hsl(340, 60%, 45%);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.foglalas-tab.active {
+  background: linear-gradient(
+    135deg,
+    hsl(340, 65%, 55%) 0%,
+    hsl(340, 75%, 65%) 100%
+  );
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(214, 62, 120, 0.3);
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.foglalas-tab.active .tab-badge {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ─── Card list ──────────────────────────────────────────────────── */
+.foglalas-list {
+  width: 100%;
+  max-width: 760px;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Desktop: 2 oszlopos kártya grid */
+@media (min-width: 900px) {
+  .foglalas-list {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+    gap: 1.2rem;
+  }
+
+  /* Ha csak 1 kártya van, ne nyújtsa ki az egész sort */
+  .foglalas-list > .foglalas-card:only-child {
+    grid-column: 1 / 2;
+  }
+
+  /* Empty state teljes sor */
+  .foglalas-list > .foglalas-empty {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── Booking card ───────────────────────────────────────────────── */
+.foglalas-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 244, 248, 0.96) 100%
+  );
+  border: 1px solid hsl(340, 50%, 90%);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 20px rgba(214, 62, 120, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem 1.5rem 1.5rem 2rem;
+  animation: cardIn 0.5s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.foglalas-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 30px rgba(214, 62, 120, 0.13),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Coloured left bar */
+.foglalas-card__bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    hsl(340, 65%, 55%) 0%,
+    hsl(340, 75%, 70%) 100%
+  );
+  border-radius: 4px 0 0 4px;
+}
+
+.foglalas-card--locked .foglalas-card__bar {
+  background: linear-gradient(180deg, hsl(35, 80%, 55%) 0%, hsl(40, 90%, 65%) 100%);
+}
+
+.foglalas-card--past .foglalas-card__bar {
+  background: linear-gradient(180deg, hsl(340, 15%, 75%) 0%, hsl(340, 10%, 85%) 100%);
+}
+
+.foglalas-card--past {
+  opacity: 0.7;
+}
+
+/* Header */
+.foglalas-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Status badge */
+.foglalas-status {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status--upcoming {
+  background: linear-gradient(135deg, hsl(340, 80%, 94%), hsl(340, 70%, 90%));
+  color: hsl(340, 60%, 48%);
+  border: 1px solid hsl(340, 60%, 82%);
+}
+
+.status--locked {
+  background: linear-gradient(135deg, hsl(35, 90%, 93%), hsl(40, 85%, 88%));
+  color: hsl(35, 65%, 40%);
+  border: 1px solid hsl(35, 70%, 78%);
+}
+
+.status--past {
+  background: hsl(340, 15%, 93%);
+  color: hsl(340, 15%, 55%);
+  border: 1px solid hsl(340, 15%, 85%);
+}
+
+.foglalas-countdown {
+  font-size: 0.78rem;
+  color: hsl(35, 65%, 45%);
+  font-weight: 500;
+}
+
+/* Service name */
+.foglalas-card__service {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: hsl(340, 40%, 22%);
+  margin: 0 0 0.9rem 0;
+}
+
+/* ─── Details – 2 oszlop, első sor teljes széles ─────────────────── */
+.foglalas-card__details {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.4rem 0;
+}
+
+.foglalas-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.875rem;
+  color: hsl(340, 20%, 40%);
+  width: 50%;
+  min-width: 0;
+}
+
+/* Dátum mindig teljes sor – hosszú szöveg */
+.foglalas-detail:first-child {
+  width: 100%;
+}
+
+.foglalas-detail__icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  width: 1.2rem;
+  text-align: center;
+}
+
+/* Footer */
+.foglalas-card__footer {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(340, 40%, 93%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Cancel button */
+.foglalas-cancel-btn {
+  padding: 0.55rem 1.4rem;
+  border-radius: 50px;
+  border: 1.5px solid hsl(340, 55%, 68%);
+  background: transparent;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: hsl(340, 55%, 50%);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.3s ease;
+}
+
+.foglalas-cancel-btn:hover {
+  background: linear-gradient(135deg, hsl(340, 65%, 55%), hsl(340, 75%, 65%));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(214, 62, 120, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Locked message */
+.foglalas-locked-msg {
+  font-size: 0.82rem;
+  color: hsl(35, 55%, 48%);
+  font-style: italic;
+}
+
+/* ─── Empty state ────────────────────────────────────────────────── */
+.foglalas-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: cardIn 0.5s ease both;
+  grid-column: 1 / -1; /* 2-col grid esetén teljes sor */
+}
+
+.foglalas-empty__icon {
+  font-size: 3.5rem;
+  opacity: 0.6;
+}
+
+.foglalas-empty__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.5rem;
+  color: hsl(340, 35%, 30%);
+  margin: 0;
+}
+
+.foglalas-empty__sub {
+  color: hsl(340, 20%, 52%);
+  max-width: 360px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.foglalas-empty__btn {
+  margin-top: 0.5rem;
+  padding: 0.7rem 2rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, hsl(340, 65%, 55%), hsl(340, 75%, 65%));
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  box-shadow: 0 4px 15px rgba(214, 62, 120, 0.3);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.foglalas-empty__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(214, 62, 120, 0.4);
+}
+
+/* ─── Info box ───────────────────────────────────────────────────── */
+.foglalas-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  max-width: 760px;
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  margin: 0 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 240, 248, 0.8),
+    rgba(255, 248, 252, 0.8)
+  );
+  border: 1px solid hsl(340, 50%, 88%);
+  border-radius: 16px;
+  font-size: 0.88rem;
+  color: hsl(340, 25%, 40%);
+  line-height: 1.6;
+}
+
+@media (min-width: 900px) {
+  .foglalas-info {
+    max-width: 1100px;
+  }
+}
+
+.foglalas-info__icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.foglalas-info strong {
+  display: block;
+  color: hsl(340, 40%, 28%);
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.foglalas-info p {
+  margin: 0;
+}
+
+/* ─── Cancel modal ───────────────────────────────────────────────── */
+.cancel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cancel-modal {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.99) 0%,
+    rgba(255, 244, 248, 0.99) 100%
+  );
+  border: 1px solid hsl(340, 50%, 88%);
+  border-radius: 24px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow:
+    0 30px 60px rgba(214, 62, 120, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.cancel-modal__icon { font-size: 2.8rem; margin-bottom: 0.75rem; }
+
+.cancel-modal__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.4rem;
+  color: hsl(340, 40%, 22%);
+  margin: 0 0 0.75rem;
+}
+
+.cancel-modal__body {
+  font-size: 0.95rem;
+  color: hsl(340, 20%, 40%);
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+}
+
+.cancel-modal__body strong { color: hsl(340, 50%, 32%); }
+
+.cancel-modal__date {
+  font-size: 0.88rem;
+  color: hsl(340, 40%, 45%);
+  background: hsl(340, 60%, 96%);
+  border: 1px solid hsl(340, 50%, 88%);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem auto 0.75rem;
+  display: inline-block;
+}
+
+.cancel-modal__note {
+  font-size: 0.82rem;
+  color: hsl(340, 15%, 55%);
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.cancel-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.cancel-modal__back {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 50px;
+  border: 1.5px solid hsl(340, 30%, 80%);
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(340, 30%, 50%);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cancel-modal__back:hover {
+  border-color: hsl(340, 50%, 70%);
+  color: hsl(340, 50%, 40%);
+  background: hsl(340, 50%, 97%);
+}
+
+.cancel-modal__confirm {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, hsl(340, 65%, 55%), hsl(340, 75%, 65%));
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(214, 62, 120, 0.3);
+  transition: all 0.25s ease;
+}
+
+.cancel-modal__confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(214, 62, 120, 0.4);
+}
+
+/* ─── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .foglalas-tabs {
+    gap: 0.3rem;
+    padding: 0.3rem;
+  }
+
+  .foglalas-tab {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .foglalas-card {
+    padding: 1.2rem 1.2rem 1.2rem 1.6rem;
+  }
+
+  .foglalas-card__service {
+    font-size: 1.15rem;
+  }
+
+  .foglalas-detail {
+    font-size: 0.82rem;
+  }
+
+  .cancel-modal {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .cancel-modal__actions {
+    flex-direction: column;
+  }
+}
+
+/* Nagyon kis képernyőn minden detail teljes széles */
+@media (max-width: 380px) {
+  .foglalas-detail,
+  .foglalas-detail:first-child {
+    width: 100%;
+  }
+
+  .foglalas-tabs {
+    flex-wrap: wrap;
+    border-radius: 16px;
+    justify-content: center;
+  }
+}
+
+/* ─── Spinner ────────────────────────────────────────────────────── */
+.cancel-spinner, .btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

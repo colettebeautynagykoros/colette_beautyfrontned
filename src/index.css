@@ -1,0 +1,11 @@
+:root {
+  --szin-mely-menta: #5B6757;      /* Mély menta / olívás */
+  --szin-hatter: #F7F3ED;          /* Meleg törtfehér */
+  --szin-szoveg: #1E1815;          /* Fekete-barna */
+  --szin-akcentus-1: #B69D9D;      /* Nude pink */
+  --szin-akcentus-2: #9E1946;      /* Mély bordó-pink */
+}
+.Toastify__toast-container {
+  z-index: 999999 !important;
+  position: fixed !important;
+}

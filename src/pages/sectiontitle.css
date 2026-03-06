@@ -1,0 +1,197 @@
+/* src/components/SectionTitle.css */
+
+.cim-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Petal SVG */
+.cim-wrap__petals {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 160px;
+  pointer-events: none;
+  opacity: 0.18;
+  z-index: 0;
+}
+
+/* Pill badge */
+.cim-wrap__badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 1.1rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, hsl(340, 80%, 94%), hsl(340, 70%, 90%));
+  border: 1px solid hsl(340, 60%, 82%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(340, 60%, 50%);
+  margin-bottom: 0.6rem;
+  white-space: nowrap;
+}
+
+.cim-wrap__badge::before,
+.cim-wrap__badge::after {
+  content: "✦";
+  font-size: 0.55rem;
+  opacity: 0.7;
+}
+
+/* Főcím */
+.cim-wrap__title {
+  position: relative;
+  z-index: 1;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: center;
+  word-break: break-word;
+  background: linear-gradient(
+    135deg,
+    hsl(340, 50%, 30%) 0%,
+    hsl(340, 70%, 52%) 50%,
+    hsl(340, 50%, 30%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dekorációs vonal a cím alatt */
+.cim-wrap__line {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+  width: min(320px, 85vw);
+}
+
+.cim-wrap__line span:not(.cim-wrap__line-gem) {
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, hsl(340, 65%, 68%), transparent);
+}
+
+.cim-wrap__line-gem {
+  width: 8px;
+  height: 8px;
+  background: hsl(340, 70%, 60%);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px hsl(340, 70%, 70%);
+}
+
+/* Bevezeto szoveg blokk */
+.cim-wrap__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+  margin-top: 1.4rem;
+  z-index: 1;
+  margin-bottom: 50px;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+.cim-wrap__lead {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 600;
+  color: hsl(340, 45%, 30%);
+  line-height: 1.55;
+  margin: 0;
+  font-style: italic;
+}
+
+.cim-wrap__sub {
+  font-size: clamp(0.88rem, 2.5vw, 0.97rem);
+  line-height: 1.75;
+  color: hsl(340, 22%, 45%);
+  margin: 0;
+}
+
+/* Kis elvalaszto a szoveg alatt */
+.cim-wrap__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+  width: min(200px, 60vw);
+}
+
+.cim-wrap__divider span:not(.cim-wrap__diamond) {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(340, 55%, 70%), transparent);
+}
+
+.cim-wrap__diamond {
+  font-size: 0.7rem;
+  color: hsl(340, 65%, 55%);
+  flex-shrink: 0;
+}
+
+/* Tablet (768px) */
+@media (max-width: 768px) {
+  .cim-wrap__petals {
+    width: 260px;
+    height: 110px;
+  }
+
+  .cim-wrap__intro {
+    margin-bottom: 35px;
+  }
+}
+
+/* Kis mobil (480px) */
+@media (max-width: 480px) {
+  .cim-wrap {
+    padding: 0 0.5rem;
+  }
+
+  .cim-wrap__petals {
+    width: 200px;
+    height: 90px;
+    opacity: 0.12;
+  }
+
+  .cim-wrap__badge {
+    font-size: 0.62rem;
+    padding: 0.25rem 0.85rem;
+    letter-spacing: 0.12em;
+  }
+
+  .cim-wrap__title {
+    letter-spacing: 0.06em;
+    font-size: 1.5rem;
+  }
+
+  .cim-wrap__intro {
+    margin-top: 1rem;
+    margin-bottom: 28px;
+    gap: 0.5rem;
+  }
+}

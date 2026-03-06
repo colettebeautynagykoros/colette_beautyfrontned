@@ -1,0 +1,93 @@
+html, body {
+  overflow-x: hidden;
+}
+
+/* ── Wrapper – ehhez képest pozicionálódik a virág ────────── */
+.info-card-wrapper {
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+/* ── Kártya ───────────────────────────────────────────────── */
+.info-card {
+  position: relative;
+  padding: 2.5rem 3rem;
+  border-radius: 28px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 235, 240, 0.9) 50%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 20px 40px rgba(214, 62, 120, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Szöveg ───────────────────────────────────────────────── */
+.info-card__text {
+  max-width: 75%;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #7a1f3d;
+  margin: 0;
+}
+
+/* ── Virág – a wrapper-hez képest pozicionálva ────────────── */
+.info-card__flower {
+  position: absolute;
+  bottom: -15%;
+  right: -8%;
+  width: 35%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── 769px – 1024px ───────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .info-card-wrapper {
+    width: 85%;
+    padding-top: 30px;
+  }
+
+  .info-card {
+    padding: 2rem 2rem;
+  }
+
+  .info-card__text {
+    max-width: 90%;
+    font-size: 1.1rem;
+  }
+
+  .info-card__flower {
+    width: 28%;
+    bottom: -10%;
+    right: -6%;
+  }
+}
+
+/* ── 768px alatt ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .info-card-wrapper {
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto 0;
+  }
+
+  .info-card {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .info-card__text {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  .info-card__flower {
+    width: 120px;
+  }
+}
