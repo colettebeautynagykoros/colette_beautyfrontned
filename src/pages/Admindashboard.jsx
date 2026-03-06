@@ -8,7 +8,7 @@ import {
   IoMdPerson, IoMdMail,
 } from "react-icons/io";
 import { MdBlock, MdSettings, MdAccessTime } from "react-icons/md";
-import "./AdminDashboard.css";
+import "./admindashboard.css";
 
 // ─── Szolgáltatások kategóriánként ───────────────────────────────────────────
 const SERVICE_CATEGORIES = [

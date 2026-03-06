@@ -3,7 +3,7 @@
 //   <SectionTitle badge="..." title="..." lead="..." sub="..." />
 
 import React from "react";
-import "./SectionTitle.css";
+import "./sectiontitle.css";
 
 export const SectionTitle = ({ badge, title, lead, sub }) => {
   return (
