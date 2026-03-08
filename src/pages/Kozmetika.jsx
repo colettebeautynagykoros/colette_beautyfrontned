@@ -48,8 +48,8 @@ const treatments = [
     id: "anti_acne",
   },
   {
-    title: "Bőrnyugtató, gyulladáscsökkentő kezelés",
-    price: "12 000 Ft",
+    title: "Arctisztítás",
+    price: "10 000 Ft",
     description:
       "A tiszta és nyugodt arcbőrért 🌿 Ha pattanásokkal, gyulladásokkal vagy mitesszerekkel küzdesz, akkor ez a kezelés neked szól! Kíméletesen tisztítom és nyugtatom a bőrt, hogy végre fellélegezhessen.",
     image: gyulladas,
