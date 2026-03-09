@@ -111,6 +111,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       {/* Admin gomb – csak adminoknak jelenik meg */}
