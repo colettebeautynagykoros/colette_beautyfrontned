@@ -973,4 +973,453 @@
 .mini-stat--warn {
   color: #c2410c;
   font-weight: 600;
+}/* ================================================================
+   CALENDAR – admindashboard.css kiegészítés
+   Másold be a meglévő admindashboard.css végére
+   ================================================================ */
+
+/* ── Calendar container ── */
+.calendar-container {
+  width: 100%;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calendar-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: hsl(340, 50%, 32%);
+  margin: 0;
+  min-width: 200px;
+  text-align: center;
+}
+
+.cal-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(214, 62, 120, 0.2);
+  background: white;
+  color: hsl(340, 60%, 45%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.15s ease;
+}
+.cal-nav-btn:hover {
+  background: hsl(340, 70%, 52%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(214, 62, 120, 0.3);
+}
+
+/* ── Calendar body (grid + detail panel) ── */
+.calendar-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.calendar-grid-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Weekday headers ── */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: hsl(340, 35%, 55%);
+  padding: 6px 0;
+}
+
+/* ── Week row ── */
+.cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+/* ── Day cell ── */
+.cal-day {
+  min-height: 90px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(214, 62, 120, 0.08);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cal-day:hover {
+  background: rgba(255, 230, 240, 0.6);
+  border-color: rgba(214, 62, 120, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(214, 62, 120, 0.1);
+}
+
+.cal-day--other {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.cal-day--today {
+  background: linear-gradient(135deg, rgba(255, 220, 235, 0.5), rgba(255, 240, 248, 0.6));
+  border-color: hsl(340, 70%, 65%) !important;
+}
+
+.cal-day--today .cal-day__num {
+  background: linear-gradient(135deg, hsl(340, 70%, 52%), hsl(340, 80%, 58%));
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.cal-day--selected {
+  background: linear-gradient(135deg, rgba(255, 200, 225, 0.45), rgba(255, 230, 245, 0.55)) !important;
+  border-color: hsl(340, 70%, 55%) !important;
+  box-shadow: 0 0 0 2px rgba(214, 62, 120, 0.2), 0 4px 16px rgba(214, 62, 120, 0.15);
+}
+
+.cal-day--blocked {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(220, 38, 38, 0.04),
+    rgba(220, 38, 38, 0.04) 4px,
+    transparent 4px,
+    transparent 10px
+  ) !important;
+  border-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+.cal-day--past {
+  opacity: 0.65;
+}
+
+.cal-day__num {
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(340, 40%, 35%);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+/* ── Blocked tag ── */
+.cal-blocked-tag {
+  font-size: 9px;
+  color: #dc2626;
+  font-weight: 600;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* ── Booking pills on calendar ── */
+.cal-day__bookings {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cal-booking-pill {
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.cal-booking-pill--done {
+  background: rgba(100, 116, 139, 0.5) !important;
+  font-weight: 500;
+  font-size: 9px;
+}
+
+.cal-booking-pill--more {
+  background: rgba(214, 62, 120, 0.3) !important;
+  color: hsl(340, 60%, 35%);
+  font-size: 9px;
+}
+
+.cal-pill-time {
+  opacity: 0.9;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.cal-pill-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* ── Detail panel ── */
+.cal-detail-panel {
+  width: 320px;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 16px;
+  border: 1.5px solid rgba(214, 62, 120, 0.15);
+  box-shadow: 0 4px 20px rgba(214, 62, 120, 0.1);
+  padding: 16px;
+  max-height: 680px;
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+}
+
+.cal-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.cal-detail-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: hsl(340, 50%, 30%);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cal-detail-blocked {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #991b1b;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.cal-detail-empty {
+  text-align: center;
+  padding: 24px 0;
+  color: hsl(340, 25%, 55%);
+  font-size: 14px;
+}
+
+.cal-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Detail booking card ── */
+.cal-detail-card {
+  border-radius: 10px;
+  border: 1.5px solid rgba(214, 62, 120, 0.12);
+  overflow: hidden;
+  display: flex;
+  background: rgba(255, 250, 253, 0.9);
+  transition: box-shadow 0.15s;
+}
+.cal-detail-card:hover {
+  box-shadow: 0 3px 12px rgba(214, 62, 120, 0.12);
+}
+
+.cal-detail-card--done {
+  opacity: 0.75;
+  background: rgba(248, 248, 248, 0.9);
+}
+
+.cal-detail-card--noshow {
+  background: rgba(254, 242, 242, 0.9);
+  border-color: rgba(220, 38, 38, 0.15);
+  opacity: 0.8;
+}
+
+.cal-detail-card__stripe {
+  width: 4px;
+  flex-shrink: 0;
+}
+
+.cal-detail-card__body {
+  padding: 10px 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cal-detail-card__top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.cal-detail-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: hsl(340, 55%, 35%);
+}
+
+.cal-detail-dur {
+  font-size: 11px;
+  color: hsl(340, 25%, 55%);
+  background: rgba(214, 62, 120, 0.08);
+  padding: 1px 6px;
+  border-radius: 20px;
+}
+
+.cal-detail-service {
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(340, 40%, 35%);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cal-detail-client {
+  font-size: 11px;
+  color: hsl(340, 25%, 48%);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.cal-detail-email {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-detail-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── Att badges ── */
+.att-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.att--upcoming { background: rgba(34, 197, 94, 0.1);  color: #15803d; }
+.att--done     { background: rgba(34, 197, 94, 0.12); color: #15803d; }
+.att--noshow   { background: rgba(220, 38, 38, 0.1);  color: #b91c1c; }
+
+/* ── Legend ── */
+.cal-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: hsl(340, 25%, 50%);
+}
+
+.cal-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Form error ── */
+.form-error {
+  display: block;
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .calendar-body {
+    flex-direction: column;
+  }
+  .cal-detail-panel {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+  .cal-day {
+    min-height: 60px;
+    padding: 4px;
+  }
+  .calendar-title {
+    min-width: 160px;
+    font-size: 1.1rem;
+  }
+  .cal-booking-pill {
+    font-size: 9px;
+    padding: 1px 3px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cal-day {
+    min-height: 48px;
+  }
+  .cal-day__num {
+    font-size: 11px;
+  }
+  .cal-booking-pill {
+    display: none;
+  }
+  .cal-day__bookings::after {
+    content: attr(data-count);
+    font-size: 10px;
+    color: hsl(340, 60%, 50%);
+    font-weight: 700;
+  }
 }
