@@ -44,13 +44,44 @@ export const Aszf = () => {
         </section>
 
         <section className="legal-section">
-          <h2>4. Időpontfoglalás</h2>
+          <h2>4. Időpontfoglalás és visszaigazolás</h2>
           <p>
             Az időpontfoglalás online, telefonon (+36 30 412 5132) vagy e-mailben
-            (colettebeautynagykoros@gmail.com) lehetséges. A foglalás csak visszaigazolás
-            után érvényes; visszaigazolás hiányában a Szolgáltató nem garantálja
-            az időpont fenntartását.
+            (colettebeautynagykoros@gmail.com) lehetséges.
           </p>
+
+          <h3 className="legal-subsection-title">A foglalás menete</h3>
+          <p>
+            Az online időpontfoglalás <strong>foglalási kérelemnek</strong> minősül, nem
+            azonnali, végleges foglalásnak. A folyamat két lépésből áll:
+          </p>
+          <ol className="legal-list">
+            <li>
+              <strong>Kérelem beérkezése:</strong> A foglalás elküldésekor az Ügyfél
+              visszaigazoló e-mailt kap arról, hogy a kérelmet feljegyeztük.
+              Az időpont ebben a szakaszban <em>jóváhagyásra vár</em>, és
+              más Ügyfél számára már nem foglalható.
+            </li>
+            <li>
+              <strong>Visszaigazolás vagy elutasítás:</strong> A Szolgáltató az igényt
+              áttekinti, majd e-mailben értesíti az Ügyfelet arról, hogy a foglalást
+              <strong> visszaigazolta</strong> (az időpont végleges), vagy
+              <strong> elutasította</strong> (az időpont felszabadul).
+            </li>
+          </ol>
+          <p>
+            A foglalás kizárólag a Szolgáltató visszaigazoló e-mailjével válik véglegessé.
+            A kérelem beérkezéséről szóló automatikus értesítő <strong>nem minősül
+            visszaigazolásnak.</strong>
+          </p>
+
+          <h3 className="legal-subsection-title">Kérelem visszavonása</h3>
+          <p>
+            A jóváhagyásra váró kérelmet az Ügyfél a „Foglalásaim" oldalon bármikor
+            visszavonhatja, amíg a Szolgáltató nem igazolta vissza.
+            Visszaigazolás után az általános lemondási feltételek (5. pont) érvényesek.
+          </p>
+
           <p>
             A kezelések díja a helyszínen, a kezelés elvégzése után esedékes.
             Az Ügyfél a foglalással tudomásul veszi, hogy az időpontfoglalás
@@ -61,9 +92,10 @@ export const Aszf = () => {
         <section className="legal-section">
           <h2>5. Lemondás, módosítás</h2>
           <p>
-            Az Ügyfél köteles a foglalt időpontot legalább <strong>24 órával korábban</strong> lemondani.
-            Késedelmes lemondás vagy meg nem jelenés esetén a Szolgáltató jogosult
-            a jövőbeli foglalásokat előfeltételekhez kötni, vagy megtagadni.
+            Az Ügyfél köteles a visszaigazolt foglalt időpontot legalább{" "}
+            <strong>24 órával korábban</strong> lemondani. Késedelmes lemondás vagy
+            meg nem jelenés esetén a Szolgáltató jogosult a jövőbeli foglalásokat
+            előfeltételekhez kötni, vagy megtagadni.
           </p>
           <p>
             A Szolgáltató fenntartja a jogot az időpont egyoldalú módosítására vagy

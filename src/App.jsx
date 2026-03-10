@@ -69,7 +69,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Fooldal />} />
         <Route path="/szolgaltatasok" element={<Szolgaltatasaim />} />
-        <Route path="/rolunk" element={<Rolam />} />
         <Route path="/foglalas" element={<Foglalas />} />
         <Route path="/szempilla" element={<Szempilla />} />
         <Route path="/gyanta-foglalas" element={<WaxingServices />} />

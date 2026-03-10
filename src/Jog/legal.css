@@ -206,3 +206,37 @@
   color: hsl(340, 70%, 55%);
   font-weight: 700;
 }
+/* ================================================================
+   LEGAL.CSS kiegészítések – add hozzá a meglévő legal.css végére
+   ================================================================ */
+
+.legal-subsection-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: hsl(340, 50%, 35%);
+  margin: 20px 0 8px;
+  padding-left: 10px;
+  border-left: 3px solid hsl(340, 65%, 60%);
+}
+
+.legal-list {
+  margin: 10px 0 14px 0;
+  padding-left: 22px;
+}
+
+.legal-list li {
+  color: hsl(340, 25%, 35%);
+  font-size: 15px;
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+
+.legal-list li strong {
+  color: hsl(340, 50%, 32%);
+}
+
+.legal-list li em {
+  color: hsl(40, 80%, 42%);
+  font-style: normal;
+  font-weight: 600;
+}

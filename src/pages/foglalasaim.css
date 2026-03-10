@@ -578,3 +578,105 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+
+/* ================================================================
+   PENDING STÁTUSZ – foglalasaim.css kiegészítések
+   Ezeket add hozzá a meglévő foglalasaim.css végére
+   ================================================================ */
+
+/* Pending státusz badge */
+.status--pending {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+/* Pending kártya bal oldali sáv */
+.foglalas-card--pending .foglalas-card__bar {
+  background: linear-gradient(180deg, #f59e0b, #fbbf24);
+}
+
+/* Pending kártya háttér */
+.foglalas-card--pending {
+  border-color: rgba(245, 158, 11, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 251, 235, 0.6) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+}
+
+/* Pending footer – kétoszlopos layout */
+.foglalas-card__footer--pending {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Pending üzenet szöveg */
+.foglalas-pending-msg {
+  font-size: 13px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Pending visszavonás gomb – halványabb, másodlagos stílus */
+.foglalas-cancel-btn--pending {
+  background: transparent;
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  color: #b45309;
+  font-size: 12px;
+  padding: 6px 14px;
+}
+
+.foglalas-cancel-btn--pending:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #f59e0b;
+}
+
+/* Pending banner – az oldal tetején, ha van függőben lévő foglalás */
+.foglalas-pending-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin: 0 0 20px;
+}
+
+.foglalas-pending-banner__icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.foglalas-pending-banner strong {
+  display: block;
+  color: #92400e;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.foglalas-pending-banner p {
+  color: #b45309;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .foglalas-card__footer--pending {
+    gap: 8px;
+  }
+
+  .foglalas-pending-banner {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+}

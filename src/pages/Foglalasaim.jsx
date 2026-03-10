@@ -25,7 +25,10 @@ const formatDate = (dateStr) => {
   });
 };
 
-const statusOf = (dateStr, timeStr) => {
+// bookingStatus: a DB-ből érkező status mező ("pending" | "booked" | undefined)
+const statusOf = (dateStr, timeStr, bookingStatus) => {
+  // Ha a backend "pending"-ként küldte, azt jelezzük – az időponttól függetlenül
+  if (bookingStatus === "pending") return "pending";
   const h = hoursUntil(dateStr, timeStr);
   if (h < 0)  return "past";
   if (h < 24) return "locked";
@@ -33,9 +36,10 @@ const statusOf = (dateStr, timeStr) => {
 };
 
 const statusLabel = {
-  upcoming: { text: "Visszamondható", cls: "status--upcoming" },
-  locked:   { text: "Hamarosan",      cls: "status--locked"   },
-  past:     { text: "Lezajlott",      cls: "status--past"     },
+  upcoming: { text: "Visszamondható",       cls: "status--upcoming" },
+  locked:   { text: "Hamarosan",            cls: "status--locked"   },
+  past:     { text: "Lezajlott",            cls: "status--past"     },
+  pending:  { text: "Jóváhagyásra vár",     cls: "status--pending"  },
 };
 
 // ─── API helper ───────────────────────────────────────────────────────────────
@@ -62,55 +66,62 @@ const NotLoggedInState = ({ onLogin }) => (
 
 // ─── Cancel Confirm Modal ─────────────────────────────────────────────────────
 
-const CancelModal = ({ booking, onConfirm, onClose, loading }) => (
-  <div className="cancel-overlay" onClick={!loading ? onClose : undefined}>
-    <div className="cancel-modal" onClick={(e) => e.stopPropagation()}>
-      <div className="cancel-modal__icon">🌸</div>
-      <h3 className="cancel-modal__title">Visszamondás megerősítése</h3>
+const CancelModal = ({ booking, onConfirm, onClose, loading }) => {
+  const isPending = booking.status === "pending";
+  return (
+    <div className="cancel-overlay" onClick={!loading ? onClose : undefined}>
+      <div className="cancel-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="cancel-modal__icon">{isPending ? "⏳" : "🌸"}</div>
+        <h3 className="cancel-modal__title">
+          {isPending ? "Kérelem visszavonása" : "Visszamondás megerősítése"}
+        </h3>
 
-      <p className="cancel-modal__body">
-        Biztosan vissza szeretnéd mondani a{" "}
-        <strong>{booking.serviceName || booking.service}</strong> foglalást?
-      </p>
-      <p className="cancel-modal__date">
-        📅 {formatDate(booking.date)} – {booking.time}
-      </p>
-      <p className="cancel-modal__note">
-        ⚠️ A visszamondás nem vonható vissza. Ha szeretnél új időpontot, foglalj
-        újra az oldalon.
-      </p>
+        <p className="cancel-modal__body">
+          {isPending
+            ? "Biztosan vissza szeretnéd vonni a foglalási kérelmedet a"
+            : "Biztosan vissza szeretnéd mondani a"}{" "}
+          <strong>{booking.serviceName || booking.service}</strong>{" "}
+          {isPending ? "szolgáltatásra?" : "foglalást?"}
+        </p>
+        <p className="cancel-modal__date">
+          📅 {formatDate(booking.date)} – {booking.time}
+        </p>
+        <p className="cancel-modal__note">
+          {isPending
+            ? "⚠️ A kérelem visszavonása után ha újra szeretnél időpontot, foglalj újra az oldalon."
+            : "⚠️ A visszamondás nem vonható vissza. Ha szeretnél új időpontot, foglalj újra az oldalon."}
+        </p>
 
-      <div className="cancel-modal__actions">
-        <button
-          className="cancel-modal__back"
-          onClick={onClose}
-          disabled={loading}
-        >
-          Mégsem, marad
-        </button>
-        <button
-          className="cancel-modal__confirm"
-          onClick={() => onConfirm(booking.id)}
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="cancel-modal__loading-row">
-              <span className="btn-spinner" />
-              Visszamondás...
-            </span>
-          ) : (
-            "Igen, visszamondom"
-          )}
-        </button>
+        <div className="cancel-modal__actions">
+          <button className="cancel-modal__back" onClick={onClose} disabled={loading}>
+            Mégsem, marad
+          </button>
+          <button
+            className="cancel-modal__confirm"
+            onClick={() => onConfirm(booking.id)}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="cancel-modal__loading-row">
+                <span className="btn-spinner" />
+                {isPending ? "Visszavonás..." : "Visszamondás..."}
+              </span>
+            ) : isPending ? (
+              "Igen, visszavonom"
+            ) : (
+              "Igen, visszamondom"
+            )}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ─── Single Booking Card ──────────────────────────────────────────────────────
 
 const BookingCard = ({ booking, onCancel, index }) => {
-  const st = statusOf(booking.date, booking.time);
+  const st = statusOf(booking.date, booking.time, booking.status);
   const { text, cls } = statusLabel[st];
   const hours = hoursUntil(booking.date, booking.time);
 
@@ -165,12 +176,24 @@ const BookingCard = ({ booking, onCancel, index }) => {
         </div>
       </div>
 
-      {st === "upcoming" && (
-        <div className="foglalas-card__footer">
+      {/* Pending: tájékoztatás + visszavonás lehetősége */}
+      {st === "pending" && (
+        <div className="foglalas-card__footer foglalas-card__footer--pending">
+          <p className="foglalas-pending-msg">
+            ⏳ Jóváhagyásra vár – értesítünk emailben, amint megerősítjük.
+          </p>
           <button
-            className="foglalas-cancel-btn"
+            className="foglalas-cancel-btn foglalas-cancel-btn--pending"
             onClick={() => onCancel(booking)}
           >
+            Kérelem visszavonása
+          </button>
+        </div>
+      )}
+
+      {st === "upcoming" && (
+        <div className="foglalas-card__footer">
+          <button className="foglalas-cancel-btn" onClick={() => onCancel(booking)}>
             Visszamond
           </button>
         </div>
@@ -199,7 +222,6 @@ const LoadingState = () => (
 // ─── Smart Empty State ────────────────────────────────────────────────────────
 
 const EmptyState = ({ filter, totalCount, upcomingCount, pastCount }) => {
-  // Soha nem volt egyetlen foglalás sem
   if (totalCount === 0) {
     return (
       <div className="foglalas-empty">
@@ -233,7 +255,6 @@ const EmptyState = ({ filter, totalCount, upcomingCount, pastCount }) => {
   }
 
   if (filter === "past") {
-    // Van közelgő foglalás, de lezajlott még nincs
     if (upcomingCount > 0) {
       return (
         <div className="foglalas-empty">
@@ -247,7 +268,6 @@ const EmptyState = ({ filter, totalCount, upcomingCount, pastCount }) => {
       );
     }
 
-    // Sem közelgő, sem lezajlott – soha nem foglalt (edge case, totalCount > 0 de mindkét szűrő üres, nem lehetséges de fallback)
     return (
       <div className="foglalas-empty">
         <div className="foglalas-empty__icon">✨</div>
@@ -319,7 +339,7 @@ const Foglalasaim = () => {
     return () => observer.disconnect();
   }, [bookings]);
 
-  // ── Visszamondás ───────────────────────────────────────────────────────────
+  // ── Visszamondás / visszavonás ─────────────────────────────────────────────
   const handleCancelConfirm = async (id) => {
     setCancelLoading(true);
     try {
@@ -341,7 +361,13 @@ const Foglalasaim = () => {
 
       setBookings((prev) => prev.filter((b) => b.id !== id));
       setCancelTarget(null);
-      toast.success("Foglalás sikeresen visszamondva! Megerősítő emailt küldtünk.");
+
+      const wasPending = cancelTarget?.status === "pending";
+      toast.success(
+        wasPending
+          ? "Foglalási kérelem visszavonva."
+          : "Foglalás sikeresen visszamondva! Megerősítő emailt küldtünk."
+      );
     } catch (err) {
       console.error("❌ Visszamondási hiba:", err);
       toast.error("Hiba történt a visszamondás során. Kérjük, próbáld újra!");
@@ -352,8 +378,8 @@ const Foglalasaim = () => {
 
   // ── Szűrés + rendezés ──────────────────────────────────────────────────────
   const filtered = bookings.filter((b) => {
-    const st = statusOf(b.date, b.time);
-    if (filter === "upcoming") return st === "upcoming" || st === "locked";
+    const st = statusOf(b.date, b.time, b.status);
+    if (filter === "upcoming") return st === "upcoming" || st === "locked" || st === "pending";
     if (filter === "past")     return st === "past";
     return true;
   });
@@ -365,11 +391,13 @@ const Foglalasaim = () => {
   });
 
   const upcomingCount = bookings.filter((b) => {
-    const st = statusOf(b.date, b.time);
-    return st === "upcoming" || st === "locked";
+    const st = statusOf(b.date, b.time, b.status);
+    return st === "upcoming" || st === "locked" || st === "pending";
   }).length;
 
-  const pastCount = bookings.filter((b) => statusOf(b.date, b.time) === "past").length;
+  const pendingCount = bookings.filter((b) => b.status === "pending").length;
+
+  const pastCount = bookings.filter((b) => statusOf(b.date, b.time, b.status) === "past").length;
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -417,6 +445,21 @@ const Foglalasaim = () => {
                 </button>
               ))}
             </div>
+
+            {/* Pending figyelmeztetés */}
+            {pendingCount > 0 && filter !== "past" && (
+              <div className="foglalas-pending-banner reveal">
+                <span className="foglalas-pending-banner__icon">⏳</span>
+                <div>
+                  <strong>
+                    {pendingCount} foglalásod jóváhagyásra vár.
+                  </strong>
+                  <p>
+                    Értesítünk emailben, amint az admin megerősíti az időpontodat. Addig az időpont foglalva van tartva.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Hiba */}
             {error && (
