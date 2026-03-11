@@ -160,7 +160,7 @@ const Smink = () => {
         </section>
 
         {/* Gallery */}
-        <section className="smink-gallery reveal">
+        {/* <section className="smink-gallery reveal">
           <h2 className="section-title">Munkáim</h2>
           <p className="section-subtitle">Néhány elkészült smink az utóbbi időből</p>
           <div className="gallery-wrapper">
@@ -175,7 +175,7 @@ const Smink = () => {
                 <span className="gallery-label">Alkalmi smink</span>
                 <span className="gallery-zoom-hint">🔍</span>
               </div>
-              {/* <div
+               <div
                 className="gallery-item"
                 onClick={() => openLightbox(sminkPhoto2, "Menyasszonyi smink")}
                 style={{ cursor: "zoom-in" }}
@@ -185,10 +185,10 @@ const Smink = () => {
                 <span className="gallery-tag">👰 Esküvői</span>
                 <span className="gallery-label">Menyasszonyi smink</span>
                 <span className="gallery-zoom-hint">🔍</span>
-              </div> */}
+              </div> 
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Services */}
         <section className="smink-services">
