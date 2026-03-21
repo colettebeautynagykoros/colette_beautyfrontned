@@ -1,23 +1,67 @@
 <!doctype html>
-<html lang="en">
-<!doctype html>
-<html lang="en">
+<html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Colette Beauty – szépségszalon leírása itt." />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <title>Colette Beauty</title>
-</head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!-- Primary SEO -->
+  <title>Colette Beauty – Szépségszalon Kecskeméten</title>
+  <meta name="description" content="Colette Beauty szépségszalon Kecskeméten. Professzionális kozmetikai kezelések, műszempilla, smink és gyantázás. Online időpontfoglalás." />
+  <meta name="keywords" content="szépségszalon, kozmetika, műszempilla, smink, gyantázás, arckezelés, Kecskemét, Colette Beauty" />
+  <meta name="author" content="Colette Beauty" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://colettebeauty.hu/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Colette Beauty" />
+  <meta property="og:title" content="Colette Beauty – Szépségszalon Kecskeméten" />
+  <meta property="og:description" content="Professzionális kozmetikai kezelések, műszempilla, smink és gyantázás Kecskeméten. Online időpontfoglalás." />
+  <meta property="og:url" content="https://colettebeauty.hu/" />
+  <meta property="og:locale" content="hu_HU" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Colette Beauty – Szépségszalon Kecskeméten" />
+  <meta name="twitter:description" content="Professzionális kozmetikai kezelések, műszempilla, smink és gyantázás Kecskeméten." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- JSON-LD: BeautySalon structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    "name": "Colette Beauty",
+    "url": "https://colettebeauty.hu",
+    "description": "Professzionális szépségszalon Kecskeméten. Kozmetikai kezelések, műszempilla, smink, gyantázás.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Kecskemét",
+      "addressCountry": "HU"
+    },
+    "priceRange": "2000–18000 Ft",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Szépségszolgáltatások",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kozmetikai arckezelések" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Műszempilla felrakás" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Alkalmi smink" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gyantázás" } }
+      ]
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>

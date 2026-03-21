@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 import { db } from "../firabse/FireBaseConfig";
 import { useNavigate } from "react-router-dom";
+import SEO from "../components/SEO";
 
 export const Foglalas = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -110,6 +111,21 @@ export const Foglalas = () => {
 
   return (
     <section className="booking-wrapper">
+      <SEO
+        title="Időpontfoglalás"
+        description="Foglalj időpontot online a Colette Beauty szépségszalonba Kecskeméten. Gyors, egyszerű és ingyenes foglalás."
+        canonical="/foglalas"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ReserveAction",
+          "name": "Online időpontfoglalás",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://colettebeauty.hu/foglalas",
+            "actionPlatform": ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"]
+          }
+        }}
+      />
       <div className="booking-card">
         <div className="booking-text">
           <h2>Foglalj időpontot</h2>

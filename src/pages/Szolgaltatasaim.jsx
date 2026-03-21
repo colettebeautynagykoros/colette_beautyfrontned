@@ -7,6 +7,7 @@ import szempillaImg from "../assets/szempilla.png";
 import sminkImg from "../assets/smink2.PNG";
 import gynataImg from "../assets/wax3.PNG";
 import { SectionTitle } from "./Sectiontitle";
+import SEO from "../components/SEO";
 
 export const Szolgaltatasaim = () => {
   const navigate = useNavigate();
@@ -60,6 +61,11 @@ export const Szolgaltatasaim = () => {
 
   return (
     <section ref={sectionRef} className="tartalom-section ferde-szolgaltatasok">
+      <SEO
+        title="Szolgáltatások"
+        description="Colette Beauty szépségszolgáltatások: kozmetika, műszempilla, smink és gyantázás Kecskeméten. Válaszd ki a számodra tökéletest."
+        canonical="/szolgaltatasok"
+      />
 
 <SectionTitle badge="Kezelések" title="Szolgáltatások"   
       lead="Minden kezelés mögött egy cél áll: hogy a legjobb formádat hozd ki magadból."
