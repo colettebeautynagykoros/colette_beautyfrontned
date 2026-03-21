@@ -733,12 +733,12 @@ const BookingCalendar = ({
                 key={i}
                 className={`calendar-cell day
       ${isSelected ? "selected" : ""}
-      ${isPast ? "past" : ""}
+      ${isPast || isToday ? "past" : ""}
       ${isBlocked ? "blocked-day" : ""}
       ${isToday ? "today" : ""}
     `}
                 onClick={() => {
-                  if (!isPast && !isBlocked) handleDayClick(dayDate);
+                  if (!isPast && !isToday && !isBlocked) handleDayClick(dayDate);
                 }}
               >
                 {day}
