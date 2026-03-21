@@ -2,6 +2,7 @@ import BookingCalendar from "../components/BookingCalendar";
 import InfoCard from "../components/InfoCard";
 import { SectionTitle } from "./Sectiontitle";
 import "./WaxingServices.css";
+import SEO from "../components/SEO";
 
 const waxingServices = [
   { name: "Bajusz",            price: 2000, icon: "💋" },
@@ -29,6 +30,19 @@ const waxingBookingServices = [
 const WaxingServices = () => {
   return (
     <section className="waxing-section">
+      <SEO
+        title="Gyantázás – Szőrtelenítés"
+        description="Professzionális gyantázás Kecskeméten. Bajusz, szemöldök, hónalj, kar, lábszár, teljes láb kezelések kedvező árakon. Online időpontfoglalás."
+        canonical="/gyanta-foglalas"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Gyantázás – szőrtelenítés",
+          "provider": { "@type": "BeautySalon", "name": "Colette Beauty" },
+          "areaServed": "Kecskemét",
+          "url": "https://colettebeauty.hu/gyanta-foglalas"
+        }}
+      />
       <div className="waxing-container">
 
         <SectionTitle

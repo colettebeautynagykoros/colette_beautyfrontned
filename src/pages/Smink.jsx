@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./smink.css";
 import BookingCalendar from "../components/BookingCalendar";
+import SEO from "../components/SEO";
 import { SectionTitle } from "./Sectiontitle";
 
 import sminkPhoto0 from "../assets/smincuccok.jpg";
@@ -79,6 +80,19 @@ const Smink = () => {
 
   return (
     <>
+      <SEO
+        title="Smink – Alkalmi és esküvői smink"
+        description="Professzionális alkalmi és esküvői smink Kecskeméten. Személyre szabott sminkkezelés bármilyen alkalomra. Online időpontfoglalás."
+        canonical="/smink"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Alkalmi és esküvői smink",
+          "provider": { "@type": "BeautySalon", "name": "Colette Beauty" },
+          "areaServed": "Kecskemét",
+          "url": "https://colettebeauty.hu/smink"
+        }}
+      />
       <BookingCalendar
         services={calendarServices}
         defaultService={selectedServiceId}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./szempilla.css";
 import BookingCalendar from "../components/BookingCalendar";
+import SEO from "../components/SEO";
 import { SectionTitle } from "./Sectiontitle";
 
 const Szempilla = () => {
@@ -148,6 +149,19 @@ const Szempilla = () => {
 
   return (
     <>
+      <SEO
+        title="Műszempilla felrakás"
+        description="Professzionális műszempilla felrakás Kecskeméten. 1D, 2D, 3D, 4D és Mega Volume szempilla kezelések. Online időpontfoglalás."
+        canonical="/szempilla"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Műszempilla felrakás",
+          "provider": { "@type": "BeautySalon", "name": "Colette Beauty" },
+          "areaServed": "Kecskemét",
+          "url": "https://colettebeauty.hu/szempilla"
+        }}
+      />
       {" "}
       <BookingCalendar
         services={calendarServices}

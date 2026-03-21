@@ -2,10 +2,22 @@ import React from "react";
 import { Szolgaltatasaim } from "./Szolgaltatasaim";
 import "./Fooldal.css";
 import heroBg from "../assets/hero-bg.jpg";
+import SEO from "../components/SEO";
 
 export const Fooldal = () => {
   return (
     <div className="fooldal-container">
+      <SEO
+        canonical="/"
+        description="Colette Beauty szépségszalon Kecskeméten. Professzionális kozmetikai kezelések, műszempilla, smink és gyantázás. Online időpontfoglalás."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Colette Beauty – Főoldal",
+          "url": "https://colettebeauty.hu/",
+          "description": "Professzionális szépségszalon Kecskeméten."
+        }}
+      />
       <section className="hero-section" style={{ backgroundImage: `url(${heroBg})` }}>
         <div className="hero-content">
           <div className="hero-title-wrapper">

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./kozmetika.css";
+import SEO from "../components/SEO";
 
 import arcmasszas from "../assets/arcmasszas.PNG";
 import gyulladas from "../assets/gyulladas.PNG";
@@ -128,6 +129,19 @@ export const Kozmetika = () => {
 
   return (
     <section className="luxury-wrapper">
+      <SEO
+        title="Kozmetika – Arckezelések"
+        description="Prémium arckezelések Kecskeméten: kollagénszálas kezelés, HYDRO-CELL, anti-acné, mélyhidratálás. Időpontfoglalás online."
+        canonical="/kozmetika"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Kozmetikai arckezelések",
+          "provider": { "@type": "BeautySalon", "name": "Colette Beauty" },
+          "areaServed": "Kecskemét",
+          "url": "https://colettebeauty.hu/kozmetika"
+        }}
+      />
       <SectionTitle
         badge="Arckezelések"
         title="Kozmetika"
