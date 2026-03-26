@@ -46,6 +46,21 @@ const getBudapestNow = (serverNowMs) => {
 };
 
 /**
+ * Budapest-aware formatDate – az Intl API-val konvertál,
+ * így a kliens időzónájától függetlenül mindig Budapest szerinti dátumot ad.
+ */
+const formatDate = (date) => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Budapest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type) => parts.find((p) => p.type === type).value;
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
+
+/**
  * Egy adott dátum slot le van-e tiltva?
  * Mai nap és múltbeli napok teljes egészében blokkoltak.
  */
@@ -181,13 +196,6 @@ const BookingCalendar = ({
   }, []);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-
-  const formatDate = (date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
-  };
 
   const timeToMinutes = (time) => {
     const [h, m] = time.split(":").map(Number);
@@ -719,23 +727,26 @@ const BookingCalendar = ({
             const dayDateStr = formatDate(dayDate);
             const isSelected = selectedDayString === dayDateStr;
 
+            // ── FIX: todayStr-rel összehasonlítjuk a Budapest-aware dayDateStr-t ──
             const isPast = dayDateStr < todayStr;
             const isToday = dayDateStr === todayStr;
             const isBlocked = blockedDates.includes(dayDateStr);
+
+            // Kattintható-e a nap?
+            const isClickable = !isPast && !isToday && !isBlocked;
 
             return (
               <div
                 key={i}
                 className={`calendar-cell day
                   ${isSelected ? "selected" : ""}
-                  ${isPast || isToday ? "past" : ""}
-                  ${isBlocked ? "blocked-day" : ""}
+                  ${isPast ? "past" : ""}
                   ${isToday ? "today" : ""}
+                  ${isBlocked ? "blocked-day" : ""}
                 `}
-                onClick={() => {
-                  if (!isPast && !isToday && !isBlocked)
-                    handleDayClick(dayDate);
-                }}
+                // inline style garantálja hogy CSS override sem tudja átengedni a kattintást
+                style={{ pointerEvents: isClickable ? "auto" : "none" }}
+                onClick={() => isClickable && handleDayClick(dayDate)}
               >
                 {day}
               </div>
