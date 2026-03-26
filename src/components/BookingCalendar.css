@@ -162,7 +162,7 @@
   transition: all 0.18s ease;
 }
 
-.calendar-cell.day:hover:not(.past):not(.selected) {
+.calendar-cell.day:hover:not(.past):not(.today):not(.selected){
   background: rgba(214, 62, 120, 0.12);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(214, 62, 120, 0.15);
@@ -638,3 +638,10 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+.calendar-cell.day.past,
+.calendar-cell.day.today {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
