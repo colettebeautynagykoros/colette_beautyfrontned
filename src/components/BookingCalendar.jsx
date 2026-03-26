@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 
 const SLOT_MINUTES = 10;
 const BUFFER_MINUTES = 10;
-const BOOKING_BUFFER_MINUTES = 10; // ennyi perccel az aktuális idő előtt nem foglalható
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -47,13 +46,13 @@ const getBudapestNow = (serverNowMs) => {
 };
 
 /**
- * Egy adott dátum+időpont slot le van-e tiltva mert az aktuális
- * Budapest idő + 10 percen belül van?
+ * Egy adott dátum slot le van-e tiltva?
+ * Mai nap és múltbeli napok teljes egészében blokkoltak.
  */
 const isSlotTooSoon = (dateStr, timeStr, serverNowMs) => {
   const bp = getBudapestNow(serverNowMs);
-  if (dateStr > bp.dateStr) return false;
-  return true; // múlt ÉS mai nap → teljes blokkolás
+  if (dateStr > bp.dateStr) return false; // jövőbeli nap → mindig ok
+  return true; // mai nap ÉS múlt → teljes blokkolás
 };
 
 // ─── Working hours ────────────────────────────────────────────────────────────
@@ -116,7 +115,6 @@ const BookingCalendar = ({
       const data = await res.json();
       if (!data.success) return;
 
-      // Hálózati késés felét levonjuk a pontosság érdekében
       const latency = (after - before) / 2;
       const offset = data.timestamp + latency - Date.now();
       setServerTimeOffset(offset);
@@ -134,7 +132,6 @@ const BookingCalendar = ({
 
   useEffect(() => {
     fetchServerTime();
-    // Percenként frissítjük az offsetet, hogy hosszú session esetén se csússzon el
     const interval = setInterval(fetchServerTime, 60_000);
     return () => clearInterval(interval);
   }, []);
@@ -327,7 +324,7 @@ const BookingCalendar = ({
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (isSubmitting) return; // ← foglalás közben ne csukjon be semmi
+      if (isSubmitting) return;
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
@@ -343,7 +340,7 @@ const BookingCalendar = ({
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [open, showPopup, isSubmitting]); // ← isSubmitting hozzáadva
+  }, [open, showPopup, isSubmitting]);
 
   // ── Foglalás küldése ──────────────────────────────────────────────────────
 
@@ -356,6 +353,11 @@ const BookingCalendar = ({
       return;
     }
 
+    // dateStr-t ELŐSZÖR deklaráljuk, mielőtt bármilyen check használja
+    if (!selectedTime || !selectedDay) return;
+    const dateStr = formatDate(selectedDay);
+
+    // Aznapi / múltbeli nap teljes blokkolása
     const bp = getBudapestNow(getServerNowMs());
     if (dateStr <= bp.dateStr) {
       toast.error("Aznapi vagy múltbeli napra nem lehet foglalni!");
@@ -366,10 +368,8 @@ const BookingCalendar = ({
       setError("Kérjük válassz szolgáltatást!");
       return;
     }
-    if (!selectedTime || !selectedDay) return;
 
     const roundedTime = roundTo10(selectedTime);
-    const dateStr = formatDate(selectedDay);
     const selectedService = services.find((s) => s.id === service);
 
     if (!selectedService || !selectedService.duration) {
@@ -380,12 +380,8 @@ const BookingCalendar = ({
 
     const duration = selectedService.duration;
 
-    // Szerver idő alapú validáció – nem lehet az aktuális időnél 10 percnél
-    // közelebb foglalni (device clock manipuláció ellen)
     if (isSlotTooSoon(dateStr, roundedTime, getServerNowMs())) {
-      toast.error(
-        "Ez az időpont már nem foglalható (túl közel van a jelenlegi időponthoz)!",
-      );
+      toast.error("Ez az időpont már nem foglalható!");
       setSelectedTime(null);
       return;
     }
@@ -446,7 +442,7 @@ const BookingCalendar = ({
   };
 
   const handleCloseClick = () => {
-    if (isSubmitting) return; // ← foglalás közben ne lehessen bezárni
+    if (isSubmitting) return;
     setShowPopup(false);
     setDropdownOpen(false);
     setOpen(false);
@@ -458,7 +454,6 @@ const BookingCalendar = ({
       toast.error(authError);
       return;
     }
-    // Szerver idő lekérése frissítése napkijelöléskor
     fetchServerTime();
     setSelectedDay(dayDate);
     setDropdownOpen(false);
@@ -618,7 +613,7 @@ const BookingCalendar = ({
                     overlapsWithBlockedTime(selectedDay, time, duration);
                   const serviceSelected = !!service;
 
-                  // Szerver idő alapú múltbeli / 10 percen belüli blokkolás
+                  // Mai nap és múlt → minden slot blokkolt
                   const tooSoon = isSlotTooSoon(
                     selectedDayString,
                     time,
@@ -639,7 +634,7 @@ const BookingCalendar = ({
                       className={`time-cell
                       ${selectedTime === time ? "selected" : ""}
                       ${isBooked ? "booked" : ""}
-                      ${!serviceSelected || isBlocked || overlaps || tooSoon ? "blocked" : ""}
+                      ${isBlocked || overlaps || tooSoon ? "blocked" : ""}
                     `}
                       disabled={isDisabled}
                       onClick={() =>
@@ -723,7 +718,6 @@ const BookingCalendar = ({
             const dayDateStr = formatDate(dayDate);
             const isSelected = selectedDayString === dayDateStr;
 
-            // Szerver idő alapján ellenőrzöm, hogy a nap múltban van-e
             const bp = getBudapestNow(getServerNowMs());
             const isPast = dayDateStr < bp.dateStr;
             const isToday = dayDateStr === bp.dateStr;
@@ -733,11 +727,11 @@ const BookingCalendar = ({
               <div
                 key={i}
                 className={`calendar-cell day
-      ${isSelected ? "selected" : ""}
-      ${isPast || isToday ? "past" : ""}
-      ${isBlocked ? "blocked-day" : ""}
-      ${isToday ? "today" : ""}
-    `}
+                  ${isSelected ? "selected" : ""}
+                  ${isPast || isToday ? "past" : ""}
+                  ${isBlocked ? "blocked-day" : ""}
+                  ${isToday ? "today" : ""}
+                `}
                 onClick={() => {
                   if (!isPast && !isToday && !isBlocked)
                     handleDayClick(dayDate);
