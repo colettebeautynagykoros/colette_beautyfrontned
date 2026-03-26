@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 
 const SLOT_MINUTES = 10;
 const BUFFER_MINUTES = 10;
-const BOOKING_BUFFER_MINUTES = 10; // ennyi perccel az aktuális idő előtt nem foglalható
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -47,19 +46,28 @@ const getBudapestNow = (serverNowMs) => {
 };
 
 /**
- * Egy adott dátum+időpont slot le van-e tiltva mert az aktuális
- * Budapest idő + 10 percen belül van?
+ * Budapest-aware formatDate – az Intl API-val konvertál,
+ * így a kliens időzónájától függetlenül mindig Budapest szerinti dátumot ad.
+ */
+const formatDate = (date) => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Budapest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type) => parts.find((p) => p.type === type).value;
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
+
+/**
+ * Egy adott dátum slot le van-e tiltva?
+ * Mai nap és múltbeli napok teljes egészében blokkoltak.
  */
 const isSlotTooSoon = (dateStr, timeStr, serverNowMs) => {
   const bp = getBudapestNow(serverNowMs);
-
   if (dateStr > bp.dateStr) return false; // jövőbeli nap → mindig ok
-  if (dateStr < bp.dateStr) return true; // múltbeli nap → mindig blokkolt
-
-  // Ugyanaz a nap → perc-szintű összehasonlítás
-  const [h, m] = timeStr.split(":").map(Number);
-  const slotMinutes = h * 60 + m;
-  return slotMinutes <= bp.totalMinutes + BOOKING_BUFFER_MINUTES;
+  return true; // mai nap ÉS múlt → teljes blokkolás
 };
 
 // ─── Working hours ────────────────────────────────────────────────────────────
@@ -108,6 +116,11 @@ const BookingCalendar = ({
   const [serverTimeOffset, setServerTimeOffset] = useState(0); // ms
   const serverOffsetRef = useRef(0);
 
+  // Mai dátum Budapest szerint (state → re-render amikor frissül)
+  const [todayStr, setTodayStr] = useState(
+    () => getBudapestNow(Date.now()).dateStr,
+  );
+
   const popupRef = useRef(null);
   const calendarRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -122,11 +135,11 @@ const BookingCalendar = ({
       const data = await res.json();
       if (!data.success) return;
 
-      // Hálózati késés felét levonjuk a pontosság érdekében
       const latency = (after - before) / 2;
       const offset = data.timestamp + latency - Date.now();
       setServerTimeOffset(offset);
       serverOffsetRef.current = offset;
+      setTodayStr(getBudapestNow(Date.now() + offset).dateStr);
     } catch (err) {
       console.warn(
         "Nem sikerült lekérni a szerver időt, kliens időt használunk:",
@@ -140,7 +153,6 @@ const BookingCalendar = ({
 
   useEffect(() => {
     fetchServerTime();
-    // Percenként frissítjük az offsetet, hogy hosszú session esetén se csússzon el
     const interval = setInterval(fetchServerTime, 60_000);
     return () => clearInterval(interval);
   }, []);
@@ -184,13 +196,6 @@ const BookingCalendar = ({
   }, []);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-
-  const formatDate = (date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
-  };
 
   const timeToMinutes = (time) => {
     const [h, m] = time.split(":").map(Number);
@@ -242,18 +247,14 @@ const BookingCalendar = ({
 
   const buildCalendarDays = () => {
     const result = [];
-    let firstCol = 0;
+    // Az 1-je melyik nap? getDay(): 0=vasárnap, 1=hétfő, ..., 6=szombat
+    // Hétfő-alapú grid: hétfő=0, kedd=1, ..., szombat=5 (vasárnapot nem jelenítjük meg)
+    const firstDow = new Date(year, month, 1).getDay();
+    const offset = firstDow === 0 ? 6 : firstDow - 1;
+    for (let i = 0; i < offset; i++) result.push(null);
     for (let d = 1; d <= daysInMonth; d++) {
       const dow = new Date(year, month, d).getDay();
-      if (dow !== 0) {
-        firstCol = dow - 1;
-        break;
-      }
-    }
-    for (let i = 0; i < firstCol; i++) result.push(null);
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dow = new Date(year, month, d).getDay();
-      if (dow !== 0) result.push(d);
+      if (dow !== 0) result.push(d); // vasárnapokat kihagyjuk
     }
     return result;
   };
@@ -333,7 +334,7 @@ const BookingCalendar = ({
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (isSubmitting) return; // ← foglalás közben ne csukjon be semmi
+      if (isSubmitting) return;
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
@@ -349,7 +350,7 @@ const BookingCalendar = ({
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [open, showPopup, isSubmitting]); // ← isSubmitting hozzáadva
+  }, [open, showPopup, isSubmitting]);
 
   // ── Foglalás küldése ──────────────────────────────────────────────────────
 
@@ -361,14 +362,23 @@ const BookingCalendar = ({
       toast.error(authError);
       return;
     }
+
+    if (!selectedTime || !selectedDay) return;
+    const dateStr = formatDate(selectedDay);
+
+    // Aznapi / múltbeli nap teljes blokkolása
+    const bp = getBudapestNow(getServerNowMs());
+    if (dateStr <= bp.dateStr) {
+      toast.error("Aznapi vagy múltbeli napra nem lehet foglalni!");
+      return;
+    }
+
     if (!service) {
       setError("Kérjük válassz szolgáltatást!");
       return;
     }
-    if (!selectedTime || !selectedDay) return;
 
     const roundedTime = roundTo10(selectedTime);
-    const dateStr = formatDate(selectedDay);
     const selectedService = services.find((s) => s.id === service);
 
     if (!selectedService || !selectedService.duration) {
@@ -379,12 +389,8 @@ const BookingCalendar = ({
 
     const duration = selectedService.duration;
 
-    // Szerver idő alapú validáció – nem lehet az aktuális időnél 10 percnél
-    // közelebb foglalni (device clock manipuláció ellen)
     if (isSlotTooSoon(dateStr, roundedTime, getServerNowMs())) {
-      toast.error(
-        "Ez az időpont már nem foglalható (túl közel van a jelenlegi időponthoz)!",
-      );
+      toast.error("Ez az időpont már nem foglalható!");
       setSelectedTime(null);
       return;
     }
@@ -445,7 +451,7 @@ const BookingCalendar = ({
   };
 
   const handleCloseClick = () => {
-    if (isSubmitting) return; // ← foglalás közben ne lehessen bezárni
+    if (isSubmitting) return;
     setShowPopup(false);
     setDropdownOpen(false);
     setOpen(false);
@@ -457,7 +463,6 @@ const BookingCalendar = ({
       toast.error(authError);
       return;
     }
-    // Szerver idő lekérése frissítése napkijelöléskor
     fetchServerTime();
     setSelectedDay(dayDate);
     setDropdownOpen(false);
@@ -617,7 +622,7 @@ const BookingCalendar = ({
                     overlapsWithBlockedTime(selectedDay, time, duration);
                   const serviceSelected = !!service;
 
-                  // Szerver idő alapú múltbeli / 10 percen belüli blokkolás
+                  // Mai nap és múlt → minden slot blokkolt
                   const tooSoon = isSlotTooSoon(
                     selectedDayString,
                     time,
@@ -638,7 +643,7 @@ const BookingCalendar = ({
                       className={`time-cell
                       ${selectedTime === time ? "selected" : ""}
                       ${isBooked ? "booked" : ""}
-                      ${!serviceSelected || isBlocked || overlaps || tooSoon ? "blocked" : ""}
+                      ${isBlocked || overlaps || tooSoon ? "blocked" : ""}
                     `}
                       disabled={isDisabled}
                       onClick={() =>
@@ -722,24 +727,26 @@ const BookingCalendar = ({
             const dayDateStr = formatDate(dayDate);
             const isSelected = selectedDayString === dayDateStr;
 
-            // Szerver idő alapján ellenőrzöm, hogy a nap múltban van-e
-            const bp = getBudapestNow(getServerNowMs());
-            const isPast = dayDateStr < bp.dateStr;
-            const isToday = dayDateStr === bp.dateStr;
+            // ── FIX: todayStr-rel összehasonlítjuk a Budapest-aware dayDateStr-t ──
+            const isPast = dayDateStr < todayStr;
+            const isToday = dayDateStr === todayStr;
             const isBlocked = blockedDates.includes(dayDateStr);
+
+            // Kattintható-e a nap?
+            const isClickable = !isPast && !isToday && !isBlocked;
 
             return (
               <div
                 key={i}
                 className={`calendar-cell day
-      ${isSelected ? "selected" : ""}
-      ${isPast ? "past" : ""}
-      ${isBlocked ? "blocked-day" : ""}
-      ${isToday ? "today" : ""}
-    `}
-                onClick={() => {
-                  if (!isPast && !isBlocked) handleDayClick(dayDate);
-                }}
+                  ${isSelected ? "selected" : ""}
+                  ${isPast ? "past" : ""}
+                  ${isToday ? "today" : ""}
+                  ${isBlocked ? "blocked-day" : ""}
+                `}
+                // inline style garantálja hogy CSS override sem tudja átengedni a kattintást
+                style={{ pointerEvents: isClickable ? "auto" : "none" }}
+                onClick={() => isClickable && handleDayClick(dayDate)}
               >
                 {day}
               </div>
