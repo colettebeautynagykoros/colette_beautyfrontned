@@ -233,18 +233,14 @@ const BookingCalendar = ({
 
   const buildCalendarDays = () => {
     const result = [];
-    let firstCol = 0;
+    // Az 1-je melyik nap? getDay(): 0=vasárnap, 1=hétfő, ..., 6=szombat
+    // Hétfő-alapú grid: hétfő=0, kedd=1, ..., szombat=5 (vasárnapot nem jelenítjük meg)
+    const firstDow = new Date(year, month, 1).getDay();
+    const offset = firstDow === 0 ? 6 : firstDow - 1;
+    for (let i = 0; i < offset; i++) result.push(null);
     for (let d = 1; d <= daysInMonth; d++) {
       const dow = new Date(year, month, d).getDay();
-      if (dow !== 0) {
-        firstCol = dow - 1;
-        break;
-      }
-    }
-    for (let i = 0; i < firstCol; i++) result.push(null);
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dow = new Date(year, month, d).getDay();
-      if (dow !== 0) result.push(d);
+      if (dow !== 0) result.push(d); // vasárnapokat kihagyjuk
     }
     return result;
   };
@@ -353,7 +349,6 @@ const BookingCalendar = ({
       return;
     }
 
-    // dateStr-t ELŐSZÖR deklaráljuk, mielőtt bármilyen check használja
     if (!selectedTime || !selectedDay) return;
     const dateStr = formatDate(selectedDay);
 
