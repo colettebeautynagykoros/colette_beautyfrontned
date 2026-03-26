@@ -101,6 +101,11 @@ const BookingCalendar = ({
   const [serverTimeOffset, setServerTimeOffset] = useState(0); // ms
   const serverOffsetRef = useRef(0);
 
+  // Mai dátum Budapest szerint (state → re-render amikor frissül)
+  const [todayStr, setTodayStr] = useState(
+    () => getBudapestNow(Date.now()).dateStr,
+  );
+
   const popupRef = useRef(null);
   const calendarRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -119,6 +124,7 @@ const BookingCalendar = ({
       const offset = data.timestamp + latency - Date.now();
       setServerTimeOffset(offset);
       serverOffsetRef.current = offset;
+      setTodayStr(getBudapestNow(Date.now() + offset).dateStr);
     } catch (err) {
       console.warn(
         "Nem sikerült lekérni a szerver időt, kliens időt használunk:",
@@ -713,9 +719,8 @@ const BookingCalendar = ({
             const dayDateStr = formatDate(dayDate);
             const isSelected = selectedDayString === dayDateStr;
 
-            const bp = getBudapestNow(getServerNowMs());
-            const isPast = dayDateStr < bp.dateStr;
-            const isToday = dayDateStr === bp.dateStr;
+            const isPast = dayDateStr < todayStr;
+            const isToday = dayDateStr === todayStr;
             const isBlocked = blockedDates.includes(dayDateStr);
 
             return (
