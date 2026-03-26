@@ -52,14 +52,8 @@ const getBudapestNow = (serverNowMs) => {
  */
 const isSlotTooSoon = (dateStr, timeStr, serverNowMs) => {
   const bp = getBudapestNow(serverNowMs);
-
-  if (dateStr > bp.dateStr) return false; // jövőbeli nap → mindig ok
-  if (dateStr < bp.dateStr) return true; // múltbeli nap → mindig blokkolt
-
-  // Ugyanaz a nap → perc-szintű összehasonlítás
-  const [h, m] = timeStr.split(":").map(Number);
-  const slotMinutes = h * 60 + m;
-  return slotMinutes <= bp.totalMinutes + BOOKING_BUFFER_MINUTES;
+  if (dateStr > bp.dateStr) return false;
+  return true; // múlt ÉS mai nap → teljes blokkolás
 };
 
 // ─── Working hours ────────────────────────────────────────────────────────────
@@ -361,6 +355,13 @@ const BookingCalendar = ({
       toast.error(authError);
       return;
     }
+
+    const bp = getBudapestNow(getServerNowMs());
+    if (dateStr <= bp.dateStr) {
+      toast.error("Aznapi vagy múltbeli napra nem lehet foglalni!");
+      return;
+    }
+
     if (!service) {
       setError("Kérjük válassz szolgáltatást!");
       return;
@@ -738,7 +739,8 @@ const BookingCalendar = ({
       ${isToday ? "today" : ""}
     `}
                 onClick={() => {
-                  if (!isPast && !isToday && !isBlocked) handleDayClick(dayDate);
+                  if (!isPast && !isToday && !isBlocked)
+                    handleDayClick(dayDate);
                 }}
               >
                 {day}
